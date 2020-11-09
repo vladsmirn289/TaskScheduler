@@ -28,6 +28,16 @@
             <#assign month = "Декабрь">
         </#if>
 
+        <form class="form-inline justify-content-center mb-4" action="/" method="get">
+            <div class="form-group">
+                <input class="form-control" type="month" name="date"/>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Ok</button>
+            </div>
+        </form>
+
         <div class="text-center text-white mb-5 h2">
             ${month}, ${localDate.getYear()?string.computer}
         </div>

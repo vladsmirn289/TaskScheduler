@@ -1,0 +1,112 @@
+package com.scheduler.TaskScheduler.UtilTest;
+
+import com.scheduler.TaskScheduler.Util.CalendarUtil;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CalendarUtilTest {
+    @Test
+    void calendarByLocalDateMethodTestFirst() {
+        LocalDate localDate = LocalDate.of(2010, Month.FEBRUARY, 1);
+        LocalDate[][] calendar = CalendarUtil.calendarByLocalDate(localDate);
+
+        LocalDate[][] answer = { {LocalDate.of(2010, Month.FEBRUARY, 1),
+                                  LocalDate.of(2010, Month.FEBRUARY, 2),
+                                  LocalDate.of(2010, Month.FEBRUARY, 3),
+                                  LocalDate.of(2010, Month.FEBRUARY, 4),
+                                  LocalDate.of(2010, Month.FEBRUARY, 5),
+                                  LocalDate.of(2010, Month.FEBRUARY, 6),
+                                  LocalDate.of(2010, Month.FEBRUARY, 7)},
+                                {
+                                  LocalDate.of(2010, Month.FEBRUARY, 8),
+                                  LocalDate.of(2010, Month.FEBRUARY, 9),
+                                  LocalDate.of(2010, Month.FEBRUARY, 10),
+                                  LocalDate.of(2010, Month.FEBRUARY, 11),
+                                  LocalDate.of(2010, Month.FEBRUARY, 12),
+                                  LocalDate.of(2010, Month.FEBRUARY, 13),
+                                  LocalDate.of(2010, Month.FEBRUARY, 14)},
+                                {
+                                  LocalDate.of(2010, Month.FEBRUARY, 15),
+                                  LocalDate.of(2010, Month.FEBRUARY, 16),
+                                  LocalDate.of(2010, Month.FEBRUARY, 17),
+                                  LocalDate.of(2010, Month.FEBRUARY, 18),
+                                  LocalDate.of(2010, Month.FEBRUARY, 19),
+                                  LocalDate.of(2010, Month.FEBRUARY, 20),
+                                  LocalDate.of(2010, Month.FEBRUARY, 21)},
+                                {
+                                  LocalDate.of(2010, Month.FEBRUARY, 22),
+                                  LocalDate.of(2010, Month.FEBRUARY, 23),
+                                  LocalDate.of(2010, Month.FEBRUARY, 24),
+                                  LocalDate.of(2010, Month.FEBRUARY, 25),
+                                  LocalDate.of(2010, Month.FEBRUARY, 26),
+                                  LocalDate.of(2010, Month.FEBRUARY, 27),
+                                  LocalDate.of(2010, Month.FEBRUARY, 28)
+                                }};
+
+        assertThat(Arrays.deepEquals(calendar, answer)).isTrue();
+    }
+
+    @Test
+    void calendarByLocalDateMethodTestSecond() {
+        LocalDate localDate = LocalDate.of(2020, Month.NOVEMBER, 1);
+        LocalDate[][] calendar = CalendarUtil.calendarByLocalDate(localDate);
+
+        LocalDate[][] answer = {
+                {
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        LocalDate.of(2020, Month.NOVEMBER, 1)},
+                {
+                        LocalDate.of(2020, Month.NOVEMBER, 2),
+                        LocalDate.of(2020, Month.NOVEMBER, 3),
+                        LocalDate.of(2020, Month.NOVEMBER, 4),
+                        LocalDate.of(2020, Month.NOVEMBER, 5),
+                        LocalDate.of(2020, Month.NOVEMBER, 6),
+                        LocalDate.of(2020, Month.NOVEMBER, 7),
+                        LocalDate.of(2020, Month.NOVEMBER, 8)},
+                {
+                        LocalDate.of(2020, Month.NOVEMBER, 9),
+                        LocalDate.of(2020, Month.NOVEMBER, 10),
+                        LocalDate.of(2020, Month.NOVEMBER, 11),
+                        LocalDate.of(2020, Month.NOVEMBER, 12),
+                        LocalDate.of(2020, Month.NOVEMBER, 13),
+                        LocalDate.of(2020, Month.NOVEMBER, 14),
+                        LocalDate.of(2020, Month.NOVEMBER, 15)},
+                {
+                        LocalDate.of(2020, Month.NOVEMBER, 16),
+                        LocalDate.of(2020, Month.NOVEMBER, 17),
+                        LocalDate.of(2020, Month.NOVEMBER, 18),
+                        LocalDate.of(2020, Month.NOVEMBER, 19),
+                        LocalDate.of(2020, Month.NOVEMBER, 20),
+                        LocalDate.of(2020, Month.NOVEMBER, 21),
+                        LocalDate.of(2020, Month.NOVEMBER, 22)},
+                {
+                        LocalDate.of(2020, Month.NOVEMBER, 23),
+                        LocalDate.of(2020, Month.NOVEMBER, 24),
+                        LocalDate.of(2020, Month.NOVEMBER, 25),
+                        LocalDate.of(2020, Month.NOVEMBER, 26),
+                        LocalDate.of(2020, Month.NOVEMBER, 27),
+                        LocalDate.of(2020, Month.NOVEMBER, 28),
+                        LocalDate.of(2020, Month.NOVEMBER, 29)},
+                {
+                        LocalDate.of(2020, Month.NOVEMBER, 30),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                }};
+
+        assertThat(Arrays.deepEquals(calendar, answer)).isTrue();
+    }
+}
