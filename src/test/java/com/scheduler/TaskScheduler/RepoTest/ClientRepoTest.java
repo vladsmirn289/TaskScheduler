@@ -25,17 +25,17 @@ public class ClientRepoTest {
         Client client3 = clientRepo.findByLogin("anotherUser").orElse(null);
 
         assertThat(client1).isNotNull();
-        assertThat(client1.getId()).isEqualTo(1L);
+        assertThat(client1.getId()).isEqualTo(100L);
         assertThat(client1.getPassword()).isEqualTo("12345");
         assertThat(client1.getLogin()).isEqualTo("simpleUser");
 
         assertThat(client2).isNotNull();
-        assertThat(client2.getId()).isEqualTo(2L);
+        assertThat(client2.getId()).isEqualTo(101L);
         assertThat(client2.getPassword()).isEqualTo("16284");
         assertThat(client2.getLogin()).isEqualTo("secondUser");
 
         assertThat(client3).isNotNull();
-        assertThat(client3.getId()).isEqualTo(3L);
+        assertThat(client3.getId()).isEqualTo(102L);
         assertThat(client3.getPassword()).isEqualTo("59134");
         assertThat(client3.getLogin()).isEqualTo("anotherUser");
     }

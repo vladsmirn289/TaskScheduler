@@ -31,7 +31,7 @@ public class TaskRepoTest {
 
     @Test
     public void shouldFindTasksByClient() {
-        Client client = clientRepo.findById(3L).orElse(null);
+        Client client = clientRepo.findById(102L).orElse(null);
         assertThat(client).isNotNull();
         List<Task> taskList = taskRepo.findByClient(client);
 
@@ -39,7 +39,7 @@ public class TaskRepoTest {
         assertThat(taskList.size()).isEqualTo(2);
 
         Task task1 = taskList.get(0);
-        assertThat(task1.getId()).isEqualTo(6);
+        assertThat(task1.getId()).isEqualTo(105L);
         assertThat(task1.getName()).isEqualTo("Task3");
         assertThat(task1.getDate()).isEqualTo(LocalDate.of(2020, 11, 23));
         assertThat(task1.getClient()).isEqualTo(client);
@@ -47,7 +47,7 @@ public class TaskRepoTest {
         assertThat(task1.getPriority()).isEqualTo(Priority.HIGH);
 
         Task task2 = taskList.get(1);
-        assertThat(task2.getId()).isEqualTo(7);
+        assertThat(task2.getId()).isEqualTo(106L);
         assertThat(task2.getName()).isEqualTo("Task4");
         assertThat(task2.getDate()).isEqualTo(LocalDate.of(2020, 11, 29));
         assertThat(task2.getClient()).isEqualTo(client);
@@ -57,7 +57,7 @@ public class TaskRepoTest {
 
     @Test
     public void shouldFindTasksByClientAndDate() {
-        Client client = clientRepo.findById(3L).orElse(null);
+        Client client = clientRepo.findById(102L).orElse(null);
         assertThat(client).isNotNull();
         List<Task> taskList = taskRepo.findByClientAndDate(client, LocalDate.of(2020, 11, 23));
 
@@ -65,7 +65,7 @@ public class TaskRepoTest {
         assertThat(taskList.size()).isEqualTo(1);
 
         Task task1 = taskList.get(0);
-        assertThat(task1.getId()).isEqualTo(6);
+        assertThat(task1.getId()).isEqualTo(105L);
         assertThat(task1.getName()).isEqualTo("Task3");
         assertThat(task1.getDate()).isEqualTo(LocalDate.of(2020, 11, 23));
         assertThat(task1.getClient()).isEqualTo(client);
