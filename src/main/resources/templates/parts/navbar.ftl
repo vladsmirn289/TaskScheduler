@@ -1,3 +1,5 @@
+<#include "security.ftl">
+
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-success">
     <a class="navbar-brand" href="/">TaskScheduler</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +19,7 @@
 
     <form class="mr-2" action="/#" method="post">
         <button class="btn p-0" type="submit">
-            <img src="https://img.icons8.com/color/40/000000/usa-circular.png" class="d-inline-block align-top" alt="US">
+            <img src="https://img.icons8.com/color/40/000000/usa-circular.png" class="d-inline-block align-top" alt="US"/>
         </button>
     </form>
 
@@ -27,15 +29,18 @@
         </button>
     </form>
 
-    <#assign isExist = false>
+    <div class="navbar-text text-white mr-3">
+        ${login_name}
+    </div>
+
     <#if isExist>
-        <form action="/#" method="post">
-            <input type="hidden" name="_csrf" <#--value="${_csrf.token}"-->/>
-            <button type="submit" class="btn btn-outline-primary">Выйти</button>
+        <form action="/logout" method="post">
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-primary">Выйти</button>
         </form>
     <#else>
-        <form action="/#" method="post">
-            <input type="hidden" name="_csrf" <#--value="${_csrf.token}"-->/>
+        <form action="/login" method="get">
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <button type="submit" class="btn btn-primary">Войти</button>
         </form>
     </#if>

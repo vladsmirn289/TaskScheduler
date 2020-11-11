@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,12 +27,15 @@ public class ClientServiceTest {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
     public void shouldFindClientByLogin() {
         Client found = clientService.findByLogin("simpleUser").orElse(null);
         assertThat(found).isNotNull();
         assertThat(found.getId()).isEqualTo(100L);
-        assertThat(found.getPassword()).isEqualTo("12345");
+        assertThat(passwordEncoder.matches("12345", found.getPassword()));
         assertThat(found.getLogin()).isEqualTo("simpleUser");
     }
 
@@ -45,7 +49,7 @@ public class ClientServiceTest {
         assertThat(found.getRoles().size()).isEqualTo(1L);
         assertThat(found.getRoles().iterator().next()).isEqualTo(Role.USER);
         assertThat(found.getLogin()).isEqualTo("NewUser");
-        assertThat(found.getPassword()).isEqualTo("newPass");
+        assertThat(passwordEncoder.matches("newPass", found.getPassword()));
     }
 
     @Test

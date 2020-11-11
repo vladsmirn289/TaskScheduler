@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +20,8 @@ public class ClientRepoTest {
     @Autowired
     private ClientRepo clientRepo;
 
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(8);
+
     @Test
     public void shouldFindClientByLogin() {
         Client client1 = clientRepo.findByLogin("simpleUser").orElse(null);
@@ -26,17 +30,17 @@ public class ClientRepoTest {
 
         assertThat(client1).isNotNull();
         assertThat(client1.getId()).isEqualTo(100L);
-        assertThat(client1.getPassword()).isEqualTo("12345");
+        assertThat(passwordEncoder.matches("12345", client1.getPassword()));
         assertThat(client1.getLogin()).isEqualTo("simpleUser");
 
         assertThat(client2).isNotNull();
         assertThat(client2.getId()).isEqualTo(101L);
-        assertThat(client2.getPassword()).isEqualTo("16284");
+        assertThat(passwordEncoder.matches("16284", client2.getPassword()));
         assertThat(client2.getLogin()).isEqualTo("secondUser");
 
         assertThat(client3).isNotNull();
         assertThat(client3.getId()).isEqualTo(102L);
-        assertThat(client3.getPassword()).isEqualTo("59134");
+        assertThat(passwordEncoder.matches("59134", client3.getPassword()));
         assertThat(client3.getLogin()).isEqualTo("anotherUser");
     }
 }

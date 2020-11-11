@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +19,12 @@ import java.util.Set;
 public class ClientServiceImpl implements ClientService {
     private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
     private final ClientRepo clientRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ClientServiceImpl(ClientRepo clientRepo) {
+    public ClientServiceImpl(ClientRepo clientRepo, PasswordEncoder passwordEncoder) {
         this.clientRepo = clientRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,6 +47,9 @@ public class ClientServiceImpl implements ClientService {
         if (roles.isEmpty()) {
             roles.add(Role.USER);
         }
+
+        String plainPassword = client.getPassword();
+        client.setPassword(passwordEncoder.encode(plainPassword));
         clientRepo.save(client);
     }
 
