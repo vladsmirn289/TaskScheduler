@@ -28,6 +28,6 @@ public class MainControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
                 .andExpect(model().attribute("now", LocalDate.now()))
-                .andExpect(model().attributeExists("calendar", "localDate"));
+                .andExpect(model().attributeExists("calendar", "localDate", "countForEachDay"));
     }
 }

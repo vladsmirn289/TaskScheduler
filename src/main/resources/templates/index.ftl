@@ -42,6 +42,7 @@
             ${month}, ${localDate.getYear()?string.computer}
         </div>
 
+        <#assign counter=0>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -60,8 +61,11 @@
                         <#list row as col>
                             <#if col??>
                                 <td class="p-0">
-                                    <button class="btn btn-block btn-warning pl-0 pt-0">
-                                    <!--<button class="button btn-block btn-danger">-->
+                                    <#if countForEachDay[counter] == 0>
+                                        <button class="btn btn-block btn-warning pl-0 pt-0">
+                                    <#else>
+                                        <button class="btn btn-block btn-danger pl-0 pt-0">
+                                    </#if>
                                         <table class="table table-borderless m-0">
                                             <tr>
                                                 <td class="p-1 text-left">
@@ -75,7 +79,8 @@
                                             </tr>
                                             <tr>
                                                 <td class="p-1"></td>
-                                                <td class="p-1 text-right">0</td>
+                                                <td class="p-1 text-right">${countForEachDay[counter]}</td>
+                                                <#assign counter+=1>
                                             </tr>
                                         </table>
                                     </button>
