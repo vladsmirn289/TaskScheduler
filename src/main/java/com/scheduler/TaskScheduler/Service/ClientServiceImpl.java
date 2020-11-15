@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class ClientServiceImpl implements ClientService {
     private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
     private final ClientRepo clientRepo;

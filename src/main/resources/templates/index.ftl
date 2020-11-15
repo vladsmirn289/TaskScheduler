@@ -62,9 +62,9 @@
                             <#if col??>
                                 <td class="p-0">
                                     <#if countForEachDay[counter] == 0>
-                                        <button class="btn btn-block btn-warning pl-0 pt-0">
+                                        <a class="btn btn-block btn-warning pl-0 pt-0" href="/task/listOfTasks/${col}">
                                     <#else>
-                                        <button class="btn btn-block btn-danger pl-0 pt-0">
+                                        <a class="btn btn-block btn-danger pl-0 pt-0" href="/task/listOfTasks/${col}">
                                     </#if>
                                         <table class="table table-borderless m-0">
                                             <tr>
@@ -83,7 +83,7 @@
                                                 <#assign counter+=1>
                                             </tr>
                                         </table>
-                                    </button>
+                                    </a>
                                 </td>
                             <#else>
                                 <td style="background-color: grey"></td>

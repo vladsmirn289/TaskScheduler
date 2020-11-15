@@ -18,6 +18,7 @@ public class Task {
     private String description;
     private Priority priority;
     private LocalDate date;
+    private int progress;
 
     protected Task() {
 
@@ -26,11 +27,13 @@ public class Task {
     public Task(String name,
                 String description,
                 Priority priority,
-                LocalDate date) {
+                LocalDate date,
+                int progress) {
         this.name = name;
         this.description = description;
         this.priority = priority;
         this.date = date;
+        this.progress = progress;
     }
 
     public Long getId() {
@@ -79,6 +82,14 @@ public class Task {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     @Override

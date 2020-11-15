@@ -2,22 +2,33 @@ package com.scheduler.TaskScheduler.Service;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.Task;
+import com.scheduler.TaskScheduler.Repository.ClientRepo;
 import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Transactional
 public class TaskServiceImpl implements TaskService {
     private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private final TaskRepo taskRepo;
+    private final ClientRepo clientRepo;
 
-    public TaskServiceImpl(TaskRepo taskRepo) {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    public TaskServiceImpl(TaskRepo taskRepo, ClientRepo clientRepo) {
         this.taskRepo = taskRepo;
+        this.clientRepo = clientRepo;
     }
 
     @Override
@@ -45,7 +56,8 @@ public class TaskServiceImpl implements TaskService {
         }
 
         taskRepo.save(task);
-        task.getClient().getTasks().add(task);
+        Client client = entityManager.merge(task.getClient());
+        client.getTasks().add(task);
     }
 
     @Override
@@ -56,8 +68,9 @@ public class TaskServiceImpl implements TaskService {
             return;
         }
 
+        Client client = entityManager.merge(task.getClient());
         taskRepo.delete(task);
-        task.getClient().getTasks().remove(task);
+        client.getTasks().remove(task);
     }
 
     @Override
@@ -69,7 +82,8 @@ public class TaskServiceImpl implements TaskService {
             return;
         }
 
+        Client client = entityManager.merge(task.getClient());
         taskRepo.deleteById(id);
-        task.getClient().getTasks().remove(task);
+        client.getTasks().remove(task);
     }
 }

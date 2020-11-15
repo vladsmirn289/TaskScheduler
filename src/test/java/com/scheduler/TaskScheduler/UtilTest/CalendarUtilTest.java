@@ -116,10 +116,10 @@ public class CalendarUtilTest {
 
     @Test
     public void shouldCountTasksByEachDay() {
-        Task task1 = new Task("t1", "d1", Priority.LOW, LocalDate.of(2020, 11, 17));
-        Task task2 = new Task("t2", "d2", Priority.MEDIUM, LocalDate.of(2020, 11, 17));
-        Task task3 = new Task("t3", "d3", Priority.NO, LocalDate.of(2020, 11, 20));
-        Task task4 = new Task("t4", "d4", Priority.HIGH, LocalDate.of(2020, 11, 17));
+        Task task1 = new Task("t1", "d1", Priority.LOW, LocalDate.of(2020, 11, 17), 0);
+        Task task2 = new Task("t2", "d2", Priority.MEDIUM, LocalDate.of(2020, 11, 17), 0);
+        Task task3 = new Task("t3", "d3", Priority.NO, LocalDate.of(2020, 11, 20), 0);
+        Task task4 = new Task("t4", "d4", Priority.HIGH, LocalDate.of(2020, 11, 17), 0);
         List<Task> tasks = new ArrayList<>(Arrays.asList(task1, task2, task3, task4));
 
         LocalDate start = LocalDate.of(2020, 11, 1);

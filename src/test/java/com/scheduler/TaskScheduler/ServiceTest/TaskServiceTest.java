@@ -2,7 +2,6 @@ package com.scheduler.TaskScheduler.ServiceTest;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.Priority;
-import com.scheduler.TaskScheduler.Model.Role;
 import com.scheduler.TaskScheduler.Model.Task;
 import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import com.scheduler.TaskScheduler.Service.ClientService;
@@ -80,7 +79,7 @@ public class TaskServiceTest {
         assertThat(client).isNotNull();
         assertThat(client.getTasks().size()).isEqualTo(1);
 
-        Task task = new Task("NewTask", "descript", Priority.NO, LocalDate.of(2021, 1, 15));
+        Task task = new Task("NewTask", "descript", Priority.NO, LocalDate.of(2021, 1, 15), 0);
         task.setClient(client);
         taskService.save(task);
 
