@@ -74,7 +74,7 @@ public class TaskControllerTest {
     @Test
     public void shouldCreateNewTask() throws Exception {
         mockMvc
-                .perform(post("/task/addTask")
+                .perform(post("/task/createOrUpdateTask")
                         .with(csrf())
                         .param("textDate", "2020-11-01")
                         .param("name", "TestTask1")
@@ -96,5 +96,111 @@ public class TaskControllerTest {
         assertThat(task.getName()).isEqualTo("TestTask1");
         assertThat(task.getPriority()).isEqualTo(Priority.HIGH);
         assertThat(task.getProgress()).isEqualTo(17);
+    }
+
+    @Test
+    public void shouldUpdateTask() throws Exception {
+        mockMvc
+                .perform(post("/task/createOrUpdateTask")
+                        .with(csrf())
+                        .param("textDate", "2020-11-30")
+                        .param("id", "106")
+                        .param("name", "TestTask4")
+                        .param("description", "TestTaskDescription4")
+                        .param("priority", "NO")
+                        .param("progress", "57"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/task/listOfTasks/2020-11-30"));
+
+        Client client = clientService.findByLogin("anotherUser").get();
+        List<Task> tasks = taskService.findByClientAndDate(client, LocalDate.of(2020, 11, 30));
+
+        assertThat(tasks.size()).isEqualTo(1);
+        Task task = tasks.get(0);
+        assertThat(task.getId()).isEqualTo(106);
+        assertThat(task.getClient()).isEqualTo(client);
+        assertThat(task.getDate()).isEqualTo(LocalDate.of(2020, 11, 30));
+        assertThat(task.getDescription()).isEqualTo("TestTaskDescription4");
+        assertThat(task.getName()).isEqualTo("TestTask4");
+        assertThat(task.getPriority()).isEqualTo(Priority.NO);
+        assertThat(task.getProgress()).isEqualTo(57);
+    }
+
+    @Test
+    public void shouldNotTransferTaskToTheNextWeekBecauseWrongUser() throws Exception {
+        mockMvc
+                .perform(post("/task/toNextWeek")
+                        .with(csrf())
+                        .param("taskCurrentDate", "2020-11-01")
+                        .param("taskId", "103"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/task/listOfTasks/2020-11-01"));
+
+        Task task = taskService.findById(103L).orElse(null);
+        assertThat(task).isNotNull();
+        assertThat(task.getDate()).isEqualTo(LocalDate.of(2020, 11, 1));
+        assertThat(task.getDescription()).isEqualTo("This is a description of task1");
+        assertThat(task.getName()).isEqualTo("Task1");
+        assertThat(task.getPriority()).isEqualTo(Priority.LOW);
+        assertThat(task.getProgress()).isEqualTo(0);
+    }
+
+    @Test
+    @WithUserDetails("simpleUser")
+    public void shouldTransferTaskToTheNextWeek() throws Exception {
+        mockMvc
+                .perform(post("/task/toNextWeek")
+                        .with(csrf())
+                        .param("taskCurrentDate", "2020-11-01")
+                        .param("taskId", "103"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/task/listOfTasks/2020-11-01"));
+
+        Task task = taskService.findById(103L).orElse(null);
+        assertThat(task).isNotNull();
+        assertThat(task.getDate()).isEqualTo(LocalDate.of(2020, 11, 8));
+        assertThat(task.getDescription()).isEqualTo("This is a description of task1");
+        assertThat(task.getName()).isEqualTo("Task1");
+        assertThat(task.getPriority()).isEqualTo(Priority.LOW);
+        assertThat(task.getProgress()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldNotDeleteTaskBecauseWrongUser() throws Exception {
+        mockMvc
+                .perform(post("/task/delete")
+                        .with(csrf())
+                        .param("taskCurrentDate", "2020-11-01")
+                        .param("taskId", "103"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/task/listOfTasks/2020-11-01"));
+
+        Task task = taskService.findById(103L).orElse(null);
+        assertThat(task).isNotNull();
+        assertThat(task.getDate()).isEqualTo(LocalDate.of(2020, 11, 1));
+        assertThat(task.getDescription()).isEqualTo("This is a description of task1");
+        assertThat(task.getName()).isEqualTo("Task1");
+        assertThat(task.getPriority()).isEqualTo(Priority.LOW);
+        assertThat(task.getProgress()).isEqualTo(0);
+    }
+
+    @Test
+    @WithUserDetails("simpleUser")
+    public void shouldDeleteTask() throws Exception {
+        mockMvc
+                .perform(post("/task/delete")
+                        .with(csrf())
+                        .param("taskCurrentDate", "2020-11-01")
+                        .param("taskId", "103"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/task/listOfTasks/2020-11-01"));
+
+        Task task = taskService.findById(103L).orElse(null);
+        assertThat(task).isNull();
     }
 }

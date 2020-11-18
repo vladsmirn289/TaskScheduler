@@ -55,6 +55,13 @@ public class TaskServiceTest {
     }
 
     @Test
+    public void shouldFindTasksById() {
+        Task task = taskService.findById(104L).orElse(null);
+        assertThat(task).isNotNull();
+        assertThat(task.getName()).isEqualTo("Task2");
+    }
+
+    @Test
     public void shouldFindTasksByClientAndDate() {
         Client client = clientService.findByLogin("anotherUser").orElse(null);
         assertThat(client).isNotNull();

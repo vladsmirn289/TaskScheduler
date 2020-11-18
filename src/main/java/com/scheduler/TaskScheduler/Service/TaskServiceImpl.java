@@ -6,6 +6,7 @@ import com.scheduler.TaskScheduler.Repository.ClientRepo;
 import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,6 +31,13 @@ public class TaskServiceImpl implements TaskService {
     public TaskServiceImpl(TaskRepo taskRepo, ClientRepo clientRepo) {
         this.taskRepo = taskRepo;
         this.clientRepo = clientRepo;
+    }
+
+    @Override
+    public Optional<Task> findById(Long id) {
+        logger.info("Finding task by id");
+
+        return taskRepo.findById(id);
     }
 
     @Override
@@ -55,9 +64,20 @@ public class TaskServiceImpl implements TaskService {
             return;
         }
 
-        taskRepo.save(task);
         Client client = entityManager.merge(task.getClient());
-        client.getTasks().add(task);
+        List<Task> tasks = client.getTasks();
+
+        if (task.getId() != null) {
+            Task persistTask = entityManager.merge(task);
+            BeanUtils.copyProperties(task, persistTask);
+            taskRepo.save(persistTask);
+
+            tasks.remove(task);
+            tasks.add(persistTask);
+        } else {
+            taskRepo.save(task);
+            tasks.add(task);
+        }
     }
 
     @Override
@@ -85,5 +105,11 @@ public class TaskServiceImpl implements TaskService {
         Client client = entityManager.merge(task.getClient());
         taskRepo.deleteById(id);
         client.getTasks().remove(task);
+    }
+
+    public boolean clientHasTask(Client client, Task task) {
+        List<Task> taskList = findByClientAndDate(client, task.getDate());
+
+        return taskList.contains(task);
     }
 }

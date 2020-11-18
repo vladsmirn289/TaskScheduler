@@ -32,11 +32,15 @@ public class MainController {
     public String mainPage(@AuthenticationPrincipal Client client,
                            @RequestParam(required = false) String date,
                            Model model) {
+        logger.info("Showing the main page");
+
         LocalDate localDate;
         if (date != null && !date.isEmpty()) {
+            logger.debug("The attribute date is equal - " + date);
             localDate = LocalDate.parse(1 + "/" + date, dateFormatter);
             logger.debug("Date param is not null - " + localDate);
         } else {
+            logger.debug("The attribute date is not set");
             localDate = LocalDate.now().withDayOfMonth(1);
             logger.debug("Date param is null - " + localDate);
         }
