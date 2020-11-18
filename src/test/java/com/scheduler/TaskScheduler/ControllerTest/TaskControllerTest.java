@@ -72,6 +72,21 @@ public class TaskControllerTest {
     }
 
     @Test
+    public void shouldShowEditTaskPage() throws Exception {
+        Task task = taskService.findById(106L).get();
+        assertThat(task).isNotNull();
+
+        mockMvc
+                .perform(get("/task/editPage")
+                        .param("taskId", "106"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("tasks/addOrEditTaskPage"))
+                .andExpect(model().attribute("task", task))
+                .andExpect(model().attribute("priorities", Priority.values()));
+    }
+
+    @Test
     public void shouldCreateNewTask() throws Exception {
         mockMvc
                 .perform(post("/task/createOrUpdateTask")
