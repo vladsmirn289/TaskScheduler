@@ -12,7 +12,7 @@
                 <a class="nav-link " href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/#">Повторяемая задача <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/task/repeatableTaskPage">Повторяемые задачи <span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>

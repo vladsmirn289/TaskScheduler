@@ -15,6 +15,9 @@ public class Client implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = {CascadeType.ALL})
     private List<Task> tasks = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = {CascadeType.ALL})
+    private List<RepeatableTask> repeatableTasks = new ArrayList<>();
+
     private String password;
     private String login;
 
@@ -47,6 +50,14 @@ public class Client implements UserDetails {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<RepeatableTask> getRepeatableTasks() {
+        return repeatableTasks;
+    }
+
+    public void setRepeatableTasks(List<RepeatableTask> repeatableTasks) {
+        this.repeatableTasks = repeatableTasks;
     }
 
     public void setPassword(String password) {

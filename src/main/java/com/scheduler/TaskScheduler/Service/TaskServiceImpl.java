@@ -2,7 +2,6 @@ package com.scheduler.TaskScheduler.Service;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.Task;
-import com.scheduler.TaskScheduler.Repository.ClientRepo;
 import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +21,17 @@ import java.util.Optional;
 public class TaskServiceImpl implements TaskService {
     private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private final TaskRepo taskRepo;
-    private final ClientRepo clientRepo;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    public TaskServiceImpl(TaskRepo taskRepo, ClientRepo clientRepo) {
+    public TaskServiceImpl(TaskRepo taskRepo) {
         this.taskRepo = taskRepo;
-        this.clientRepo = clientRepo;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Task> findById(Long id) {
         logger.info("Finding task by id");
 
