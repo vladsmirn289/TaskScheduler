@@ -67,10 +67,10 @@ public class TaskController {
     }
 
     @PostMapping("/createOrUpdateTask")
-    public String createOrUpdateNewTask(@AuthenticationPrincipal Client client,
-                                        @ModelAttribute("task") Task task,
-                                        @RequestParam("textDate") String stringDate) {
-        logger.info("Creating new task");
+    public String createOrUpdateTask(@AuthenticationPrincipal Client client,
+                                     @ModelAttribute("task") Task task,
+                                     @RequestParam("textDate") String stringDate) {
+        logger.info("Creating or updating task");
         task.setClient(client);
         LocalDate date = LocalDate.parse(stringDate);
         task.setDate(date);

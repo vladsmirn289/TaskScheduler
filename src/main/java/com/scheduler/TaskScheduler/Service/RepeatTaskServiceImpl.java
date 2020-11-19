@@ -95,4 +95,11 @@ public class RepeatTaskServiceImpl implements RepeatTaskService {
         repeatTaskRepo.deleteById(id);
         client.getRepeatableTasks().remove(task);
     }
+
+    @Override
+    public boolean clientHasRepeatTask(Client client, RepeatableTask task) {
+        List<RepeatableTask> tasks = findByClient(client);
+
+        return tasks.contains(task);
+    }
 }

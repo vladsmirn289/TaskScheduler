@@ -14,4 +14,6 @@ public interface RepeatTaskService {
 
     void delete(RepeatableTask task);
     void deleteById(Long id);
+
+    boolean clientHasRepeatTask(Client client, RepeatableTask task);
 }
