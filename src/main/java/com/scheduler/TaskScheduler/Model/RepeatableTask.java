@@ -17,7 +17,6 @@ public class RepeatableTask {
     private String name;
     private String description;
     private Priority priority;
-    private int progress;
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -30,14 +29,12 @@ public class RepeatableTask {
     public RepeatableTask(String name,
                           String description,
                           Priority priority,
-                          int progress,
                           LocalDate startDate,
                           LocalDate endDate,
                           PeriodMode periodMode) {
         this.name = name;
         this.description = description;
         this.priority = priority;
-        this.progress = progress;
         this.startDate = startDate;
         this.endDate = endDate;
         this.periodMode = periodMode;
@@ -83,14 +80,6 @@ public class RepeatableTask {
         this.priority = priority;
     }
 
-    public int getProgress() {
-        return progress;
-    }
-
-    public void setProgress(int progress) {
-        this.progress = progress;
-    }
-
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -120,8 +109,7 @@ public class RepeatableTask {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RepeatableTask that = (RepeatableTask) o;
-        return progress == that.progress &&
-                client.equals(that.client) &&
+        return client.equals(that.client) &&
                 name.equals(that.name) &&
                 description.equals(that.description) &&
                 priority == that.priority &&
@@ -132,6 +120,6 @@ public class RepeatableTask {
 
     @Override
     public int hashCode() {
-        return Objects.hash(client, name, description, priority, progress, startDate, endDate, periodMode);
+        return Objects.hash(client, name, description, priority, startDate, endDate, periodMode);
     }
 }

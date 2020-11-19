@@ -66,7 +66,7 @@ public class RepeatTaskServiceTest {
         assertThat(client).isNotNull();
         assertThat(client.getRepeatableTasks().size()).isEqualTo(0);
 
-        RepeatableTask task = new RepeatableTask("NewTask", "descript", Priority.NO, 0,
+        RepeatableTask task = new RepeatableTask("NewTask", "descript", Priority.NO,
                 LocalDate.of(2020, 11, 15), LocalDate.of(2020, 11, 30), PeriodMode.EACH_DAY);
         task.setClient(client);
         repeatTaskService.save(task);
