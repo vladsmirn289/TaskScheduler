@@ -52,7 +52,7 @@ public class CalendarUtil {
         int[] countTasks = new int[end.getDayOfMonth()];
 
         tasks.stream()
-                .filter(t -> t.getDate().getMonth().equals(start.getMonth()))
+                .filter(t -> t.getDate().getMonth().equals(start.getMonth()) && t.getProgress() != 100)
                 .sorted(Comparator.comparing(Task::getDate))
                 .forEach(t -> countTasks[t.getDate().getDayOfMonth()-1] += 1);
 
