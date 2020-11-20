@@ -21,11 +21,10 @@
             <div class="form-group">
                 <label for="inputPriority">Выберите приоритет</label><br/>
                 <select id="inputPriority" name="priority" class="form-control mx-auto" style="width: 50%">
-                    <#list priorities as priority>
-                        <option <#if task?? && priority == task.getPriority()>selected="selected"</#if>>
-                            ${priority}
-                        </option>
-                    </#list>
+                    <option value="NO" <#if task?? && "NO" == task.getPriority()>selected="selected"</#if>>Нет</option>
+                    <option value="LOW" <#if task?? && "LOW" == task.getPriority()>selected="selected"</#if>>Низкий</option>
+                    <option value="MEDIUM" <#if task?? && "MEDIUM" == task.getPriority()>selected="selected"</#if>>Средний</option>
+                    <option value="HIGH" <#if task?? && "HIGH" == task.getPriority()>selected="selected"</#if>>Высокий</option>
                 </select>
             </div>
 
