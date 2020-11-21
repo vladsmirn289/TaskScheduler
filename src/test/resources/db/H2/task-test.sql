@@ -2,3 +2,4 @@ INSERT INTO task(id, client_id, date, name, description, priority, progress) VAL
 INSERT INTO task(id, client_id, date, name, description, priority, progress) VALUES (104, 101, '2020-11-15', 'Task2', 'This is a description of task2', 0, 0);
 INSERT INTO task(id, client_id, date, name, description, priority, progress) VALUES (105, 102, '2020-11-23', 'Task3', 'This is a description of task3', 3, 0);
 INSERT INTO task(id, client_id, date, name, description, priority, progress) VALUES (106, 102, '2020-11-29', 'Task4', 'This is a description of task4', 2, 0);
+INSERT INTO task(id, client_id, repeatable_task_id, date, name, description, priority, progress) VALUES (107, 101, 200, '2020-11-30', 'RTask5', 'This is a repeatable description of rtask5', 2, 0);

@@ -2,9 +2,10 @@ package com.scheduler.TaskScheduler.ServiceTest;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.Priority;
+import com.scheduler.TaskScheduler.Model.RepeatableTask;
 import com.scheduler.TaskScheduler.Model.Task;
-import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import com.scheduler.TaskScheduler.Service.ClientService;
+import com.scheduler.TaskScheduler.Service.RepeatTaskService;
 import com.scheduler.TaskScheduler.Service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @PropertySource(value = "classpath:application.properties")
 @Sql(value = {
         "classpath:db/H2/client-test.sql",
+        "classpath:db/H2/repeatTask-test.sql",
         "classpath:db/H2/task-test.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "classpath:db/H2/after-test.sql",
@@ -34,7 +36,7 @@ public class TaskServiceTest {
     private ClientService clientService;
 
     @Autowired
-    private TaskRepo taskRepo;
+    private RepeatTaskService repeatTaskService;
 
     @Test
     public void shouldFindTasksByClient() {
@@ -77,6 +79,15 @@ public class TaskServiceTest {
 
         List<Task> taskList = taskService.findByClientAndDate(client, LocalDate.of(2000, 1, 29));
         assertThat(taskList.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldFindAllTasksByRepeatableTask() {
+        RepeatableTask repeatableTask = repeatTaskService.findById(200L).orElse(null);
+        assertThat(repeatableTask).isNotNull();
+
+        List<Task> tasks = taskService.findAllByRepeatableTask(repeatableTask);
+        assertThat(tasks.size()).isEqualTo(1);
     }
 
     @Test

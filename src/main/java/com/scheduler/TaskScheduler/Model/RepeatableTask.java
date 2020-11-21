@@ -2,6 +2,8 @@ package com.scheduler.TaskScheduler.Model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +15,9 @@ public class RepeatableTask {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @OneToMany(mappedBy = "repeatableTask", cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();
 
     private String name;
     private String description;
@@ -54,6 +59,14 @@ public class RepeatableTask {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public String getName() {

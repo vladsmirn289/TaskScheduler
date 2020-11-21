@@ -2,8 +2,10 @@ package com.scheduler.TaskScheduler.RepoTest;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.Priority;
+import com.scheduler.TaskScheduler.Model.RepeatableTask;
 import com.scheduler.TaskScheduler.Model.Task;
 import com.scheduler.TaskScheduler.Repository.ClientRepo;
+import com.scheduler.TaskScheduler.Repository.RepeatTaskRepo;
 import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @PropertySource(value = "classpath:application.properties")
 @Sql(value = {
         "classpath:db/H2/client-test.sql",
+        "classpath:db/H2/repeatTask-test.sql",
         "classpath:db/H2/task-test.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class TaskRepoTest {
@@ -28,6 +31,9 @@ public class TaskRepoTest {
 
     @Autowired
     private ClientRepo clientRepo;
+
+    @Autowired
+    private RepeatTaskRepo repeatTaskRepo;
 
     @Test
     public void shouldFindTasksByClient() {
@@ -71,5 +77,15 @@ public class TaskRepoTest {
         assertThat(task1.getClient()).isEqualTo(client);
         assertThat(task1.getDescription()).isEqualTo("This is a description of task3");
         assertThat(task1.getPriority()).isEqualTo(Priority.HIGH);
+    }
+
+    @Test
+    public void shouldFindTasksByRepeatableTask() {
+        RepeatableTask repeatableTask = repeatTaskRepo.findById(200L).get();
+        List<Task> tasks = taskRepo.findAllByRepeatableTask(repeatableTask);
+        assertThat(tasks.size()).isEqualTo(1);
+
+        Task task = tasks.get(0);
+        assertThat(task.getName()).isEqualTo("RTask5");
     }
 }

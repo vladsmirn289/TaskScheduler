@@ -21,17 +21,30 @@
             <div class="form-group">
                 <label for="inputPriority">Выберите приоритет</label><br/>
                 <select id="inputPriority" name="priority" class="form-control mx-auto" style="width: 50%">
-                    <#list priorities as priority>
-                        <option <#if repeatTask?? && priority == repeatTask.getPriority()>selected="selected"</#if>>
-                            ${priority}
-                        </option>
-                    </#list>
+                    <option value="NO" <#if repeatTask?? && "NO" == repeatTask.getPriority()>selected="selected"</#if>>
+                        Нет
+                    </option>
+                    <option value="LOW" <#if repeatTask?? && "LOW" == repeatTask.getPriority()>selected="selected"</#if>>
+                        Низкий
+                    </option>
+                    <option value="MEDIUM" <#if repeatTask?? && "MEDIUM" == repeatTask.getPriority()>selected="selected"</#if>>
+                        Средний
+                    </option>
+                    <option value="HIGH" <#if repeatTask?? && "HIGH" == repeatTask.getPriority()>selected="selected"</#if>>
+                        Высокий
+                    </option>
                 </select>
             </div>
 
             <#if dateError??>
                 <div class="text-danger">
                     Дата должна быть задана!
+                </div>
+            </#if>
+
+            <#if dateStartError??>
+                <div class="text-danger">
+                    Начальная дата должна идти до конечной!
                 </div>
             </#if>
 
@@ -50,11 +63,9 @@
             <div class="form-group">
                 <label for="inputPeriodMode">Выберите период</label><br/>
                 <select id="inputPeriodMode" name="periodMode" class="form-control mx-auto" style="width: 50%">
-                    <#list periodModes as periodMode>
-                        <option <#if repeatTask?? && periodMode == repeatTask.getPeriodMode()>selected="selected"</#if>>
-                            ${periodMode}
-                        </option>
-                    </#list>
+                    <option value="EACH_DAY" <#if repeatTask?? && "EACH_DAY" == repeatTask.getPeriodMode()>selected="selected"</#if>>
+                        Каждый день
+                    </option>
                 </select>
             </div>
 

@@ -1,6 +1,7 @@
 package com.scheduler.TaskScheduler.Service;
 
 import com.scheduler.TaskScheduler.Model.Client;
+import com.scheduler.TaskScheduler.Model.RepeatableTask;
 import com.scheduler.TaskScheduler.Model.Task;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public interface TaskService {
     Optional<Task> findById(Long id);
     List<Task> findByClient(Client client);
     List<Task> findByClientAndDate(Client client, LocalDate date);
+    List<Task> findAllByRepeatableTask(RepeatableTask repeatableTask);
 
     void save(Task task);
 

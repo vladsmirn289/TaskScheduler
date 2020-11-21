@@ -1,10 +1,9 @@
 package com.scheduler.TaskScheduler.Controller;
 
-import com.scheduler.TaskScheduler.Model.Client;
-import com.scheduler.TaskScheduler.Model.PeriodMode;
-import com.scheduler.TaskScheduler.Model.Priority;
-import com.scheduler.TaskScheduler.Model.RepeatableTask;
+import com.scheduler.TaskScheduler.Model.*;
 import com.scheduler.TaskScheduler.Service.RepeatTaskService;
+import com.scheduler.TaskScheduler.Service.TaskService;
+import com.scheduler.TaskScheduler.Util.PeriodFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,12 @@ import java.util.List;
 public class RepeatTaskController {
     private final static Logger logger = LoggerFactory.getLogger(RepeatTaskController.class);
     private final RepeatTaskService repeatTaskService;
+    private final TaskService taskService;
 
     @Autowired
-    public RepeatTaskController(RepeatTaskService repeatTaskService) {
+    public RepeatTaskController(RepeatTaskService repeatTaskService, TaskService taskService) {
         this.repeatTaskService = repeatTaskService;
+        this.taskService = taskService;
     }
 
     @GetMapping("/list")
@@ -64,34 +65,45 @@ public class RepeatTaskController {
         return "tasks/addOrEditRepeatTaskPage";
     }
 
-    /*TODO: add logic related with creating list of tasks*/
     @PostMapping("/createOrUpdateTask")
     public String createOrUpdateTask(@AuthenticationPrincipal Client client,
                                      @ModelAttribute("repeatTask") RepeatableTask task,
                                      @RequestParam("startDateString") String startDate,
                                      @RequestParam("endDateString") String endDate,
+                                     PeriodFacade periodFacade,
                                      Model model) {
         logger.info("Creating or updating task");
         if (startDate == null || endDate == null || startDate.isEmpty() || endDate.isEmpty()) {
             model.addAttribute("dateError", "");
             model.addAttribute("repeatTask", task);
-            model.addAttribute("priorities", Priority.values());
-            model.addAttribute("periodModes", PeriodMode.values());
+
+            return "tasks/addOrEditRepeatTaskPage";
+        }
+
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        if (start.isAfter(end)) {
+            model.addAttribute("dateStartError", "");
+            model.addAttribute("repeatTask", task);
 
             return "tasks/addOrEditRepeatTaskPage";
         }
 
         task.setClient(client);
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate);
         task.setStartDate(start);
         task.setEndDate(end);
+
+        if (task.getId() == null) {
+            task = periodFacade.initTasks(task);
+        } else {
+            task = periodFacade.updateTasks(task, taskService);
+        }
         repeatTaskService.save(task);
 
         return "redirect:/repeatTask/list";
     }
 
-    /*TODO: add logic related with deleting list of tasks*/
     @PostMapping("/delete")
     public String deleteTask(@AuthenticationPrincipal Client client,
                              @RequestParam("taskId") Long id) {

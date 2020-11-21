@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @PropertySource(value = "classpath:application.properties")
 @Sql(value = {
         "classpath:db/H2/client-test.sql",
+        "classpath:db/H2/repeatTask-test.sql",
         "classpath:db/H2/task-test.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "classpath:db/H2/after-test.sql",

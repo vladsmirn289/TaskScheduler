@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @PropertySource(value = "classpath:application.properties")
 @Sql(value = {
         "classpath:db/H2/client-test.sql",
-        "classpath:db/H2/task-test.sql",
-        "classpath:db/H2/repeatTask-test.sql"
+        "classpath:db/H2/repeatTask-test.sql",
+        "classpath:db/H2/task-test.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class RepeatTaskRepoTest {
     @Autowired

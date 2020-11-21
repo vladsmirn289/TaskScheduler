@@ -6,6 +6,7 @@ import com.scheduler.TaskScheduler.Model.Priority;
 import com.scheduler.TaskScheduler.Model.RepeatableTask;
 import com.scheduler.TaskScheduler.Service.ClientService;
 import com.scheduler.TaskScheduler.Service.RepeatTaskService;
+import com.scheduler.TaskScheduler.Service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -34,8 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Sql(value = {
         "classpath:db/H2/client-test.sql",
-        "classpath:db/H2/task-test.sql",
-        "classpath:db/H2/repeatTask-test.sql"
+        "classpath:db/H2/repeatTask-test.sql",
+        "classpath:db/H2/task-test.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {
         "classpath:db/H2/after-test.sql"},
@@ -50,6 +51,9 @@ public class RepeatTaskControllerTest {
 
     @Autowired
     private RepeatTaskService repeatTaskService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Test
     public void shouldShowListOfRepeatableTasksPage() throws Exception {
@@ -117,6 +121,9 @@ public class RepeatTaskControllerTest {
         assertThat(task.getName()).isEqualTo("Repeatable...");
         assertThat(task.getPriority()).isEqualTo(Priority.HIGH);
         assertThat(task.getPeriodMode()).isEqualTo(PeriodMode.EACH_DAY);
+
+        int size = taskService.findByClient(client).size();
+        assertThat(size).isEqualTo(21);
     }
 
     @Test
@@ -133,7 +140,25 @@ public class RepeatTaskControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("tasks/addOrEditRepeatTaskPage"))
-                .andExpect(model().attributeExists("dateError", "repeatTask", "priorities", "periodModes"));
+                .andExpect(model().attributeExists("dateError", "repeatTask"));
+    }
+
+    @Test
+    public void shouldNotSaveBecauseDateStartError() throws Exception {
+        mockMvc
+                .perform(post("/repeatTask/createOrUpdateTask")
+                        .with(csrf())
+                        .param("startDateString", "2020-11-02")
+                        .param("endDateString", "2020-11-01")
+                        .param("name", "Repeatable...")
+                        .param("description", "RepeatableDescription...")
+                        .param("priority", "HIGH")
+                        .param("periodMode", "EACH_DAY"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("tasks/addOrEditRepeatTaskPage"))
+                .andExpect(model().attributeExists("dateStartError", "repeatTask"))
+                .andExpect(model().attributeDoesNotExist("dateError"));
     }
 
     @Test

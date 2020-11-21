@@ -14,6 +14,10 @@ public class Task {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @ManyToOne
+    @JoinColumn(name = "repeatable_task_id")
+    private RepeatableTask repeatableTask;
+
     private String name;
     private String description;
     private Priority priority;
@@ -50,6 +54,14 @@ public class Task {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public RepeatableTask getRepeatableTask() {
+        return repeatableTask;
+    }
+
+    public void setRepeatableTask(RepeatableTask repeatableTask) {
+        this.repeatableTask = repeatableTask;
     }
 
     public String getName() {

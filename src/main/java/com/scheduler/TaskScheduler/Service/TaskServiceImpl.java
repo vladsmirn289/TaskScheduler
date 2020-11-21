@@ -1,6 +1,7 @@
 package com.scheduler.TaskScheduler.Service;
 
 import com.scheduler.TaskScheduler.Model.Client;
+import com.scheduler.TaskScheduler.Model.RepeatableTask;
 import com.scheduler.TaskScheduler.Model.Task;
 import com.scheduler.TaskScheduler.Repository.TaskRepo;
 import org.slf4j.Logger;
@@ -55,6 +56,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Task> findAllByRepeatableTask(RepeatableTask repeatableTask) {
+        return taskRepo.findAllByRepeatableTask(repeatableTask);
+    }
+
+    @Override
     public void save(Task task) {
         logger.info("Saving task");
 
@@ -66,8 +73,8 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = client.getTasks();
 
         if (task.getId() != null) {
-            Task persistTask = entityManager.merge(task);
-            BeanUtils.copyProperties(task, persistTask);
+            Task persistTask = findById(task.getId()).get();
+            BeanUtils.copyProperties(task, persistTask, "repeatableTask");
             taskRepo.save(persistTask);
 
             tasks.remove(task);

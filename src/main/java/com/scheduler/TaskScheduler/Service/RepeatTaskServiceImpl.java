@@ -2,6 +2,7 @@ package com.scheduler.TaskScheduler.Service;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.RepeatableTask;
+import com.scheduler.TaskScheduler.Model.Task;
 import com.scheduler.TaskScheduler.Repository.RepeatTaskRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,9 @@ public class RepeatTaskServiceImpl implements RepeatTaskService {
 
         Client client = entityManager.merge(task.getClient());
         List<RepeatableTask> tasks = client.getRepeatableTasks();
+        List<Task> relatedTasks = task.getTasks();
+
+        relatedTasks.forEach(t -> t.setRepeatableTask(task));
 
         if (task.getId() != null) {
             RepeatableTask persistTask = entityManager.merge(task);
