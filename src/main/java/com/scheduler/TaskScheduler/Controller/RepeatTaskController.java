@@ -1,5 +1,6 @@
 package com.scheduler.TaskScheduler.Controller;
 
+import com.scheduler.TaskScheduler.DTO.PeriodParameters;
 import com.scheduler.TaskScheduler.Model.*;
 import com.scheduler.TaskScheduler.Service.RepeatTaskService;
 import com.scheduler.TaskScheduler.Service.TaskService;
@@ -70,7 +71,7 @@ public class RepeatTaskController {
                                      @ModelAttribute("repeatTask") RepeatableTask task,
                                      @RequestParam("startDateString") String startDate,
                                      @RequestParam("endDateString") String endDate,
-                                     PeriodFacade periodFacade,
+                                     PeriodParameters periodParameters,
                                      Model model) {
         logger.info("Creating or updating task");
         if (startDate == null || endDate == null || startDate.isEmpty() || endDate.isEmpty()) {
@@ -94,10 +95,17 @@ public class RepeatTaskController {
         task.setStartDate(start);
         task.setEndDate(end);
 
+        PeriodFacade periodFacade = new PeriodFacade(task, periodParameters);
         if (task.getId() == null) {
-            task = periodFacade.initTasks(task);
+            task = periodFacade.initTasks();
         } else {
-            task = periodFacade.updateTasks(task, taskService);
+            List<Task> tasksBefore = taskService.findAllByRepeatableTask(task);
+            task.setTasks(tasksBefore);
+            task = periodFacade.updateTasks();
+
+            List<Task> tasksAfter = task.getTasks();
+            tasksBefore.removeAll(tasksAfter);
+            tasksBefore.forEach(taskService::delete);
         }
         repeatTaskService.save(task);
 
