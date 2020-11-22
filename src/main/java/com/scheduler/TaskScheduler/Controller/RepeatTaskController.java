@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -106,6 +107,10 @@ public class RepeatTaskController {
             List<Task> tasksAfter = task.getTasks();
             tasksBefore.removeAll(tasksAfter);
             tasksBefore.forEach(taskService::delete);
+
+            List<Task> toAdd = new ArrayList<>(tasksAfter);
+            toAdd.removeAll(tasksBefore);
+            toAdd.forEach(taskService::save);
         }
         repeatTaskService.save(task);
 

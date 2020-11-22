@@ -63,10 +63,20 @@
             <div class="form-group">
                 <label for="inputPeriodMode">Выберите период</label><br/>
                 <select id="inputPeriodMode" name="periodMode" class="form-control mx-auto" style="width: 50%">
-                    <option value="EACH_DAY" <#if repeatTask?? && "EACH_DAY" == repeatTask.getPeriodMode()>selected="selected"</#if>>
+                    <option class="each_day_opt" value="EACH_DAY"
+                            <#if repeatTask?? && "EACH_DAY" == repeatTask.getPeriodMode()>selected="selected"</#if>>
                         Каждый день
                     </option>
+
+                    <option class="each_week_opt" value="EACH_WEEK"
+                            <#if repeatTask?? && "EACH_WEEK" == repeatTask.getPeriodMode()>selected="selected"</#if>>
+                        Каждую неделю
+                    </option>
                 </select>
+
+                <div id="period_res" class="mt-2">
+
+                </div>
             </div>
 
             <div class="form-group">
@@ -79,4 +89,44 @@
             </div>
         </form>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            let days_of_week = "<label for='mon'>Пн</label>\n" +
+                "                    <input type='checkbox' id='mon' name='monday'/>\n" +
+                "\n" +
+                "                    <label for='tue'>Вт</label>\n" +
+                "                    <input type='checkbox' id='tue' name='tuesday'/>\n" +
+                "\n" +
+                "                    <label for='wed'>Ср</label>\n" +
+                "                    <input type='checkbox' id='wed' name='wednesday'/>\n" +
+                "\n" +
+                "                    <label for='thu'>Чт</label>\n" +
+                "                    <input type='checkbox' id='thu' name='thursday'/>\n" +
+                "\n" +
+                "                    <label for='fri'>Пт</label>\n" +
+                "                    <input type='checkbox' id='fri' name='friday'/>\n" +
+                "\n" +
+                "                    <label for='sat'>Сб</label>\n" +
+                "                    <input type='checkbox' id='sat' name='saturday'/>\n" +
+                "\n" +
+                "                    <label for='sun'>Вс</label>\n" +
+                "                    <input type='checkbox' id='sun' name='sunday'/>"
+
+
+            if ($('#inputPeriodMode option:selected').hasClass("each_day_opt")) {
+                $("#period_res").html("")
+            } else if ($('#inputPeriodMode option:selected').hasClass("each_week_opt")) {
+                $("#period_res").html(days_of_week)
+            }
+
+            $('#inputPeriodMode').change(function() {
+                if ($('#inputPeriodMode option:selected').hasClass("each_day_opt")) {
+                    $("#period_res").html("")
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_week_opt")) {
+                    $("#period_res").html(days_of_week)
+                }
+            })
+        })
+    </script>
 </@c.commonPage>

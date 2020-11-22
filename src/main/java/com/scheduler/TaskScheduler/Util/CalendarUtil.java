@@ -1,11 +1,13 @@
 package com.scheduler.TaskScheduler.Util;
 
+import com.scheduler.TaskScheduler.DTO.PeriodParameters;
 import com.scheduler.TaskScheduler.Model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -59,5 +61,39 @@ public class CalendarUtil {
         return Arrays.stream(countTasks)
                 .boxed()
                 .collect(Collectors.toList());
+    }
+
+    public static List<DayOfWeek> daysOfWeekByPeriodParams(PeriodParameters periodParameters) {
+        List<DayOfWeek> dayOfWeeks = new ArrayList<>();
+
+        if (periodParameters.isMonday()) {
+            dayOfWeeks.add(DayOfWeek.MONDAY);
+        }
+
+        if (periodParameters.isTuesday()) {
+            dayOfWeeks.add(DayOfWeek.TUESDAY);
+        }
+
+        if (periodParameters.isWednesday()) {
+            dayOfWeeks.add(DayOfWeek.WEDNESDAY);
+        }
+
+        if (periodParameters.isThursday()) {
+            dayOfWeeks.add(DayOfWeek.THURSDAY);
+        }
+
+        if (periodParameters.isFriday()) {
+            dayOfWeeks.add(DayOfWeek.FRIDAY);
+        }
+
+        if (periodParameters.isSaturday()) {
+            dayOfWeeks.add(DayOfWeek.SATURDAY);
+        }
+
+        if (periodParameters.isSunday()) {
+            dayOfWeeks.add(DayOfWeek.SUNDAY);
+        }
+
+        return dayOfWeeks;
     }
 }

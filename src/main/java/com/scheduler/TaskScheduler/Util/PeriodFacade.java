@@ -3,6 +3,7 @@ package com.scheduler.TaskScheduler.Util;
 import com.scheduler.TaskScheduler.DTO.PeriodParameters;
 import com.scheduler.TaskScheduler.Model.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,7 +20,6 @@ public class PeriodFacade {
     private Priority priority;
     private PeriodMode periodMode;
     private Client client;
-    private List<Task> tasks;
 
     public PeriodFacade(RepeatableTask repeatableTask, PeriodParameters periodParameters) {
         this.repeatableTask = repeatableTask;
@@ -32,7 +32,6 @@ public class PeriodFacade {
         this.priority = repeatableTask.getPriority();
         this.periodMode = repeatableTask.getPeriodMode();
         this.client = repeatableTask.getClient();
-        this.tasks = repeatableTask.getTasks();
     }
 
     public RepeatableTask getRepeatableTask() {
@@ -49,7 +48,6 @@ public class PeriodFacade {
         this.priority = repeatableTask.getPriority();
         this.periodMode = repeatableTask.getPeriodMode();
         this.client = repeatableTask.getClient();
-        this.tasks = repeatableTask.getTasks();
     }
 
     public PeriodParameters getPeriodParameters() {
@@ -65,6 +63,8 @@ public class PeriodFacade {
 
         if (periodMode.equals(PeriodMode.EACH_DAY)) {
             tasks = createTasksOnEachDay(startDate, endDate);
+        } else if (periodMode.equals(PeriodMode.EACH_WEEK)) {
+            tasks = createTasksOnEachWeek(startDate, endDate);
         }
 
         repeatableTask.setTasks(tasks);
@@ -72,8 +72,13 @@ public class PeriodFacade {
     }
 
     public RepeatableTask updateTasks() {
+        List<Task> tasks = repeatableTask.getTasks();
+        tasks.sort(Comparator.comparing(Task::getDate));
+
         if (periodMode.equals(PeriodMode.EACH_DAY)) {
-             repeatableTask.setTasks(updateTasksOnEachDay());
+            repeatableTask.setTasks(updateTasksOnEachDay(tasks));
+        } else if (periodMode.equals(PeriodMode.EACH_WEEK)) {
+            repeatableTask.setTasks(updateTasksOnEachWeek(tasks));
         }
 
         return repeatableTask;
@@ -93,8 +98,7 @@ public class PeriodFacade {
         return tasks;
     }
 
-    private List<Task> updateTasksOnEachDay() {
-        tasks.sort(Comparator.comparing(Task::getDate));
+    private List<Task> updateTasksOnEachDay(List<Task> tasks) {
         LocalDate date = startDate;
         List<Task> resultTasks = new ArrayList<>();
         for (Task t : tasks) {
@@ -113,6 +117,57 @@ public class PeriodFacade {
 
         if (date.isBefore(endDate) || date.isEqual(endDate)) {
             resultTasks.addAll(createTasksOnEachDay(date, endDate));
+        }
+
+        return resultTasks;
+    }
+
+    private List<Task> createTasksOnEachWeek(LocalDate start, LocalDate end) {
+        List<Task> tasks = new ArrayList<>();
+        List<DayOfWeek> daysOfWeeks = CalendarUtil.daysOfWeekByPeriodParams(periodParameters);
+
+        while (start.isBefore(end) || start.isEqual(end)) {
+            while (!daysOfWeeks.contains(start.getDayOfWeek()) && !start.isAfter(end)) {
+                start = start.plusDays(1);
+            }
+            if (start.isAfter(end)) {
+                break;
+            }
+
+            Task task = new Task(name, description, priority, start, 0);
+            task.setClient(client);
+
+            tasks.add(task);
+            start = start.plusDays(1);
+        }
+
+        return tasks;
+    }
+
+    private List<Task> updateTasksOnEachWeek(List<Task> tasks) {
+        LocalDate date = startDate;
+        List<Task> resultTasks = new ArrayList<>();
+        List<DayOfWeek> daysOfWeeks = CalendarUtil.daysOfWeekByPeriodParams(periodParameters);
+
+        for (Task t : tasks) {
+            while (!daysOfWeeks.contains(date.getDayOfWeek()) && !date.isAfter(endDate)) {
+                date = date.plusDays(1);
+            }
+            if (date.isAfter(endDate)) {
+                break;
+            }
+            t.setDate(date);
+            date = date.plusDays(1);
+
+            t.setDescription(description);
+            t.setName(name);
+            t.setPriority(priority);
+
+            resultTasks.add(t);
+        }
+
+        if (date.isBefore(endDate) || date.isEqual(endDate)) {
+            resultTasks.addAll(createTasksOnEachWeek(date, endDate));
         }
 
         return resultTasks;

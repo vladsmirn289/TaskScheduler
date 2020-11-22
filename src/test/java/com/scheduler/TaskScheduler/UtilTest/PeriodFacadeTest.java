@@ -21,7 +21,15 @@ public class PeriodFacadeTest {
                     LocalDate.of(2020, 11, 1), LocalDate.of(2020, 11, 4),
                     PeriodMode.EACH_DAY);
 
-    private PeriodFacade periodFacade = new PeriodFacade(repeatableTask, new PeriodParameters());
+    private final PeriodFacade periodFacade = new PeriodFacade(repeatableTask, new PeriodParameters());
+
+    private void checkParams(Task task, LocalDate date, String name, String description, Priority priority, int progress) {
+        assertThat(task.getDate()).isEqualTo(date);
+        assertThat(task.getName()).isEqualTo(name);
+        assertThat(task.getDescription()).isEqualTo(description);
+        assertThat(task.getPriority()).isEqualTo(priority);
+        assertThat(task.getProgress()).isEqualTo(progress);
+    }
 
     @Test
     public void shouldInitTasksWithEachDayPeriod() {
@@ -31,38 +39,25 @@ public class PeriodFacadeTest {
         assertThat(tasks.size()).isEqualTo(4);
 
         Task task1 = tasks.get(0);
-        assertThat(task1.getDate()).isEqualTo(LocalDate.of(2020, 11, 1));
-        assertThat(task1.getName()).isEqualTo("RT1");
-        assertThat(task1.getDescription()).isEqualTo("RD1");
-        assertThat(task1.getPriority()).isEqualTo(Priority.MEDIUM);
-        assertThat(task1.getProgress()).isEqualTo(0);
+        checkParams(task1, LocalDate.of(2020, 11, 1),
+                "RT1", "RD1", Priority.MEDIUM, 0);
 
         Task task2 = tasks.get(1);
-        assertThat(task2.getDate()).isEqualTo(LocalDate.of(2020, 11, 2));
-        assertThat(task2.getName()).isEqualTo("RT1");
-        assertThat(task2.getDescription()).isEqualTo("RD1");
-        assertThat(task2.getPriority()).isEqualTo(Priority.MEDIUM);
-        assertThat(task2.getProgress()).isEqualTo(0);
+        checkParams(task2, LocalDate.of(2020, 11, 2),
+                "RT1", "RD1", Priority.MEDIUM, 0);
 
         Task task3 = tasks.get(2);
-        assertThat(task3.getDate()).isEqualTo(LocalDate.of(2020, 11, 3));
-        assertThat(task3.getName()).isEqualTo("RT1");
-        assertThat(task3.getDescription()).isEqualTo("RD1");
-        assertThat(task3.getPriority()).isEqualTo(Priority.MEDIUM);
-        assertThat(task3.getProgress()).isEqualTo(0);
+        checkParams(task3, LocalDate.of(2020, 11, 3),
+                "RT1", "RD1", Priority.MEDIUM, 0);
 
         Task task4 = tasks.get(3);
-        assertThat(task4.getDate()).isEqualTo(LocalDate.of(2020, 11, 4));
-        assertThat(task4.getName()).isEqualTo("RT1");
-        assertThat(task4.getDescription()).isEqualTo("RD1");
-        assertThat(task4.getPriority()).isEqualTo(Priority.MEDIUM);
-        assertThat(task4.getProgress()).isEqualTo(0);
+        checkParams(task4, LocalDate.of(2020, 11, 4),
+                "RT1", "RD1", Priority.MEDIUM, 0);
     }
 
     @Test
     public void shouldUpdateTasksWithEachDayPeriod() {
         repeatableTask.setEndDate(LocalDate.of(2020, 11, 2));
-        periodFacade.setRepeatableTask(repeatableTask);
         RepeatableTask rt = periodFacade.initTasks();
 
         rt.setDescription("New description");
@@ -76,18 +71,12 @@ public class PeriodFacadeTest {
         assertThat(tasks.size()).isEqualTo(2);
 
         Task task1 = tasks.get(0);
-        assertThat(task1.getDate()).isEqualTo(LocalDate.of(2020, 11, 1));
-        assertThat(task1.getName()).isEqualTo("New name");
-        assertThat(task1.getDescription()).isEqualTo("New description");
-        assertThat(task1.getPriority()).isEqualTo(Priority.HIGH);
-        assertThat(task1.getProgress()).isEqualTo(0);
+        checkParams(task1, LocalDate.of(2020, 11, 1),
+                "New name", "New description", Priority.HIGH, 0);
 
         Task task2 = tasks.get(1);
-        assertThat(task2.getDate()).isEqualTo(LocalDate.of(2020, 11, 2));
-        assertThat(task2.getName()).isEqualTo("New name");
-        assertThat(task2.getDescription()).isEqualTo("New description");
-        assertThat(task2.getPriority()).isEqualTo(Priority.HIGH);
-        assertThat(task2.getProgress()).isEqualTo(0);
+        checkParams(task2, LocalDate.of(2020, 11, 2),
+                "New name", "New description", Priority.HIGH, 0);
     }
 
     @Test
@@ -105,18 +94,12 @@ public class PeriodFacadeTest {
         assertThat(tasks.size()).isEqualTo(2);
 
         Task task1 = tasks.get(0);
-        assertThat(task1.getDate()).isEqualTo(LocalDate.of(2020, 11, 1));
-        assertThat(task1.getName()).isEqualTo("New name");
-        assertThat(task1.getDescription()).isEqualTo("New description");
-        assertThat(task1.getPriority()).isEqualTo(Priority.HIGH);
-        assertThat(task1.getProgress()).isEqualTo(0);
+        checkParams(task1, LocalDate.of(2020, 11, 1),
+                "New name", "New description", Priority.HIGH, 0);
 
         Task task2 = tasks.get(1);
-        assertThat(task2.getDate()).isEqualTo(LocalDate.of(2020, 11, 2));
-        assertThat(task2.getName()).isEqualTo("New name");
-        assertThat(task2.getDescription()).isEqualTo("New description");
-        assertThat(task2.getPriority()).isEqualTo(Priority.HIGH);
-        assertThat(task2.getProgress()).isEqualTo(0);
+        checkParams(task2, LocalDate.of(2020, 11, 2),
+                "New name", "New description", Priority.HIGH, 0);
     }
 
     @Test
@@ -135,17 +118,164 @@ public class PeriodFacadeTest {
         assertThat(tasks.size()).isEqualTo(2);
 
         Task task1 = tasks.get(0);
-        assertThat(task1.getDate()).isEqualTo(LocalDate.of(2020, 11, 1));
-        assertThat(task1.getName()).isEqualTo("New name");
-        assertThat(task1.getDescription()).isEqualTo("New description");
-        assertThat(task1.getPriority()).isEqualTo(Priority.HIGH);
-        assertThat(task1.getProgress()).isEqualTo(0);
+        checkParams(task1, LocalDate.of(2020, 11, 1),
+                "New name", "New description", Priority.HIGH, 0);
 
         Task task2 = tasks.get(1);
-        assertThat(task2.getDate()).isEqualTo(LocalDate.of(2020, 11, 2));
-        assertThat(task2.getName()).isEqualTo("New name");
-        assertThat(task2.getDescription()).isEqualTo("New description");
-        assertThat(task2.getPriority()).isEqualTo(Priority.HIGH);
-        assertThat(task2.getProgress()).isEqualTo(0);
+        checkParams(task2, LocalDate.of(2020, 11, 2),
+                "New name", "New description", Priority.HIGH, 0);
+    }
+
+    @Test
+    public void shouldInitTasksWithEachWeekPeriod() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setSunday(true);
+        periodParameters.setThursday(true);
+        periodParameters.setSaturday(true);
+
+        repeatableTask.setEndDate(LocalDate.of(2020, 11, 8));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK);
+
+        periodFacade.setRepeatableTask(repeatableTask);
+        periodFacade.setPeriodParameters(periodParameters);
+        RepeatableTask rt = periodFacade.initTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(4);
+
+        for (Task t : tasks) {
+            System.out.println(t.getDate());
+        }
+
+        Task task1 = tasks.get(0);
+        checkParams(task1, LocalDate.of(2020, 11, 1),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+
+        Task task2 = tasks.get(1);
+        checkParams(task2, LocalDate.of(2020, 11, 5),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+
+        Task task3 = tasks.get(2);
+        checkParams(task3, LocalDate.of(2020, 11, 7),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+
+        Task task4 = tasks.get(3);
+        checkParams(task4, LocalDate.of(2020, 11, 8),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+    }
+
+    @Test
+    public void shouldUpdateTasksWithEachWeekPeriod() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonday(true);
+        periodParameters.setWednesday(true);
+
+        repeatableTask.setEndDate(LocalDate.of(2020, 11, 9));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK);
+        RepeatableTask rt = periodFacade.initTasks();
+
+        PeriodParameters periodParameters2 = new PeriodParameters();
+        periodParameters2.setTuesday(true);
+        periodParameters2.setFriday(true);
+        periodParameters2.setSunday(true);
+
+        rt.setDescription("New description");
+        rt.setName("New name");
+        rt.setPriority(Priority.HIGH);
+
+        periodFacade.setRepeatableTask(rt);
+        periodFacade.setPeriodParameters(periodParameters2);
+        rt = periodFacade.updateTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(4);
+
+        Task task1 = tasks.get(0);
+        checkParams(task1, LocalDate.of(2020, 11, 1),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task2 = tasks.get(1);
+        checkParams(task2, LocalDate.of(2020, 11, 3),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task3 = tasks.get(2);
+        checkParams(task3, LocalDate.of(2020, 11, 6),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task4 = tasks.get(3);
+        checkParams(task4, LocalDate.of(2020, 11, 8),
+                "New name", "New description", Priority.HIGH, 0);
+    }
+
+    @Test
+    public void shouldUpdateTasksWithEachWeekPeriodAndDateDecrementing() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonday(true);
+        periodParameters.setWednesday(true);
+
+        repeatableTask.setEndDate(LocalDate.of(2020, 11, 9));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK);
+        periodFacade.setPeriodParameters(periodParameters);
+        RepeatableTask rt = periodFacade.initTasks();
+        rt.setDescription("New description");
+        rt.setName("New name");
+        rt.setPriority(Priority.HIGH);
+        rt.setEndDate(LocalDate.of(2020, 11, 4));
+
+        periodParameters.setMonday(false);
+        periodParameters.setTuesday(true);
+        periodFacade.setRepeatableTask(rt);
+        rt = periodFacade.updateTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(2);
+
+        Task task1 = tasks.get(0);
+        checkParams(task1, LocalDate.of(2020, 11, 3),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task2 = tasks.get(1);
+        checkParams(task2, LocalDate.of(2020, 11, 4),
+                "New name", "New description", Priority.HIGH, 0);
+    }
+
+    @Test
+    public void shouldUpdateTasksWithEachWeekPeriodAndDateIncrementing() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonday(true);
+        periodParameters.setWednesday(true);
+
+        repeatableTask.setEndDate(LocalDate.of(2020, 11, 9));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK);
+        periodFacade.setPeriodParameters(periodParameters);
+        RepeatableTask rt = periodFacade.initTasks();
+        rt.setDescription("New description");
+        rt.setName("New name");
+        rt.setPriority(Priority.HIGH);
+        rt.setEndDate(LocalDate.of(2020, 11, 14));
+
+        periodParameters.setMonday(false);
+        periodParameters.setThursday(true);
+        periodFacade.setRepeatableTask(rt);
+        rt = periodFacade.updateTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(4);
+
+        Task task1 = tasks.get(0);
+        checkParams(task1, LocalDate.of(2020, 11, 4),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task2 = tasks.get(1);
+        checkParams(task2, LocalDate.of(2020, 11, 5),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task3 = tasks.get(2);
+        checkParams(task3, LocalDate.of(2020, 11, 11),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task task4 = tasks.get(3);
+        checkParams(task4, LocalDate.of(2020, 11, 12),
+                "New name", "New description", Priority.HIGH, 0);
     }
 }
