@@ -102,15 +102,11 @@ public class RepeatTaskController {
         } else {
             List<Task> tasksBefore = taskService.findAllByRepeatableTask(task);
             task.setTasks(tasksBefore);
+            tasksBefore.forEach(taskService::delete);
             task = periodFacade.updateTasks();
 
             List<Task> tasksAfter = task.getTasks();
-            tasksBefore.removeAll(tasksAfter);
-            tasksBefore.forEach(taskService::delete);
-
-            List<Task> toAdd = new ArrayList<>(tasksAfter);
-            toAdd.removeAll(tasksBefore);
-            toAdd.forEach(taskService::save);
+            tasksAfter.forEach(taskService::save);
         }
         repeatTaskService.save(task);
 

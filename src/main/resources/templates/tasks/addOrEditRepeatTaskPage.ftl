@@ -63,14 +63,16 @@
             <div class="form-group">
                 <label for="inputPeriodMode">Выберите период</label><br/>
                 <select id="inputPeriodMode" name="periodMode" class="form-control mx-auto" style="width: 50%">
-                    <option class="each_day_opt" value="EACH_DAY"
-                            <#if repeatTask?? && "EACH_DAY" == repeatTask.getPeriodMode()>selected="selected"</#if>>
+                    <option class="each_day_opt" value="EACH_DAY" selected="selected">
                         Каждый день
                     </option>
 
-                    <option class="each_week_opt" value="EACH_WEEK"
-                            <#if repeatTask?? && "EACH_WEEK" == repeatTask.getPeriodMode()>selected="selected"</#if>>
+                    <option class="each_week_opt" value="EACH_WEEK">
                         Каждую неделю
+                    </option>
+
+                    <option class="each_day_of_month_opt" value="EACH_DAY_OF_MONTH">
+                        Каждый день месяца
                     </option>
                 </select>
 
@@ -111,20 +113,18 @@
                 "                    <input type='checkbox' id='sat' name='saturday'/>\n" +
                 "\n" +
                 "                    <label for='sun'>Вс</label>\n" +
-                "                    <input type='checkbox' id='sun' name='sunday'/>"
+                "                    <input type='checkbox' id='sun' name='sunday'/>";
 
-
-            if ($('#inputPeriodMode option:selected').hasClass("each_day_opt")) {
-                $("#period_res").html("")
-            } else if ($('#inputPeriodMode option:selected').hasClass("each_week_opt")) {
-                $("#period_res").html(days_of_week)
-            }
+            let day_of_month = "<label for='dayNum'></label> " +
+                "<input type='number' min='1' max='31' id='dayNum' name='dayOfMonth'/>";
 
             $('#inputPeriodMode').change(function() {
                 if ($('#inputPeriodMode option:selected').hasClass("each_day_opt")) {
                     $("#period_res").html("")
                 } else if ($('#inputPeriodMode option:selected').hasClass("each_week_opt")) {
                     $("#period_res").html(days_of_week)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_day_of_month_opt")) {
+                    $("#period_res").html(day_of_month)
                 }
             })
         })

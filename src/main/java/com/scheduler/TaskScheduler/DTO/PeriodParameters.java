@@ -9,6 +9,8 @@ public class PeriodParameters {
     private boolean saturday;
     private boolean sunday;
 
+    private int dayOfMonth;
+
     public boolean isMonday() {
         return monday;
     }
@@ -63,5 +65,13 @@ public class PeriodParameters {
 
     public void setSunday(boolean sunday) {
         this.sunday = sunday;
+    }
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
     }
 }

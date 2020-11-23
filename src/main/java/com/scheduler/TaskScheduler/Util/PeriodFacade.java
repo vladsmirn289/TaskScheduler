@@ -3,6 +3,7 @@ package com.scheduler.TaskScheduler.Util;
 import com.scheduler.TaskScheduler.DTO.PeriodParameters;
 import com.scheduler.TaskScheduler.Model.*;
 
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -65,6 +66,8 @@ public class PeriodFacade {
             tasks = createTasksOnEachDay(startDate, endDate);
         } else if (periodMode.equals(PeriodMode.EACH_WEEK)) {
             tasks = createTasksOnEachWeek(startDate, endDate);
+        } else if (periodMode.equals(PeriodMode.EACH_DAY_OF_MONTH)) {
+            tasks = createTasksOnEachDayOfMonth(startDate, endDate);
         }
 
         repeatableTask.setTasks(tasks);
@@ -79,9 +82,19 @@ public class PeriodFacade {
             repeatableTask.setTasks(updateTasksOnEachDay(tasks));
         } else if (periodMode.equals(PeriodMode.EACH_WEEK)) {
             repeatableTask.setTasks(updateTasksOnEachWeek(tasks));
+        } else if (periodMode.equals(PeriodMode.EACH_DAY_OF_MONTH)) {
+            repeatableTask.setTasks(updateTasksOnEachDayOfMonth(tasks));
         }
 
         return repeatableTask;
+    }
+
+    private void setTaskProperties(Task t, LocalDate date) {
+        t.setDate(date);
+        t.setDescription(description);
+        t.setName(name);
+        t.setPriority(priority);
+        t.setId(null);
     }
 
     private List<Task> createTasksOnEachDay(LocalDate start, LocalDate end) {
@@ -105,13 +118,8 @@ public class PeriodFacade {
             if (date.isAfter(endDate)) {
                 break;
             }
-            t.setDate(date);
+            setTaskProperties(t, date);
             date = date.plusDays(1);
-
-            t.setDescription(description);
-            t.setName(name);
-            t.setPriority(priority);
-
             resultTasks.add(t);
         }
 
@@ -156,18 +164,79 @@ public class PeriodFacade {
             if (date.isAfter(endDate)) {
                 break;
             }
-            t.setDate(date);
+            setTaskProperties(t, date);
             date = date.plusDays(1);
-
-            t.setDescription(description);
-            t.setName(name);
-            t.setPriority(priority);
-
             resultTasks.add(t);
         }
 
         if (date.isBefore(endDate) || date.isEqual(endDate)) {
             resultTasks.addAll(createTasksOnEachWeek(date, endDate));
+        }
+
+        return resultTasks;
+    }
+
+    private List<Task> createTasksOnEachDayOfMonth(LocalDate start, LocalDate end) {
+        List<Task> tasks = new ArrayList<>();
+        int dayNumber = periodParameters.getDayOfMonth();
+        LocalDate date = start;
+
+        while (date.isBefore(end) || date.isEqual(end)) {
+            try {
+                date = date.withDayOfMonth(dayNumber);
+            } catch (DateTimeException e) {
+                date = date.plusMonths(1);
+                continue;
+            }
+
+            if (date.isBefore(start)) {
+                date = date.plusMonths(1);
+                continue;
+            }
+
+            if (date.isAfter(end)) {
+                break;
+            }
+
+            Task task = new Task(name, description, priority, date, 0);
+            task.setClient(client);
+
+            tasks.add(task);
+            date = date.plusMonths(1);
+        }
+
+        return tasks;
+    }
+
+    private List<Task> updateTasksOnEachDayOfMonth(List<Task> tasks) {
+        LocalDate date = startDate;
+        List<Task> resultTasks = new ArrayList<>();
+        int dayNumber = periodParameters.getDayOfMonth();
+
+        for (Task t : tasks) {
+            while (date.getDayOfMonth() != dayNumber && !date.isAfter(endDate) || date.isBefore(startDate)) {
+                try {
+                    date = date.withDayOfMonth(dayNumber);
+                } catch (DateTimeException e) {
+                    date = date.plusMonths(1);
+                    continue;
+                }
+
+                if (date.isBefore(startDate)) {
+                    date = date.plusMonths(1);
+                }
+            }
+
+            if (date.isAfter(endDate)) {
+                break;
+            }
+            setTaskProperties(t, date);
+            date = date.plusMonths(1);
+            resultTasks.add(t);
+        }
+
+        if (date.isBefore(endDate) || date.isEqual(endDate)) {
+            resultTasks.addAll(createTasksOnEachDayOfMonth(date, endDate));
         }
 
         return resultTasks;
