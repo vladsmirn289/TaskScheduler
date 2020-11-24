@@ -113,7 +113,13 @@ public class PeriodFacade {
             task.setClient(client);
 
             tasks.add(task);
-            start = start.plusDays(1);
+
+            int gapDays = periodParameters.getGapDays();
+            if (gapDays != 0) {
+                start = start.plusDays(1 + gapDays);
+            } else {
+                start = start.plusDays(1);
+            }
         }
 
         return tasks;
@@ -127,8 +133,14 @@ public class PeriodFacade {
                 break;
             }
             setTaskProperties(t, date);
-            date = date.plusDays(1);
             resultTasks.add(t);
+
+            int gapDays = periodParameters.getGapDays();
+            if (gapDays != 0) {
+                date = date.plusDays(1 + gapDays);
+            } else {
+                date = date.plusDays(1);
+            }
         }
 
         if (date.isBefore(endDate) || date.isEqual(endDate)) {
@@ -141,10 +153,15 @@ public class PeriodFacade {
     private List<Task> createTasksOnEachWeek(LocalDate start, LocalDate end) {
         List<Task> tasks = new ArrayList<>();
         List<DayOfWeek> daysOfWeeks = CalendarUtil.daysOfWeekByPeriodParams(periodParameters);
+        int gapWeeks = periodParameters.getGapWeeks();
 
         while (start.isBefore(end) || start.isEqual(end)) {
             while (!daysOfWeeks.contains(start.getDayOfWeek()) && !start.isAfter(end)) {
-                start = start.plusDays(1);
+                if (gapWeeks != 0 && start.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                    start = start.plusDays(8);
+                } else {
+                    start = start.plusDays(1);
+                }
             }
             if (start.isAfter(end)) {
                 break;
@@ -154,7 +171,12 @@ public class PeriodFacade {
             task.setClient(client);
 
             tasks.add(task);
-            start = start.plusDays(1);
+
+            if (gapWeeks != 0 && start.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                start = start.plusDays(8);
+            } else {
+                start = start.plusDays(1);
+            }
         }
 
         return tasks;
@@ -164,17 +186,27 @@ public class PeriodFacade {
         LocalDate date = startDate;
         List<Task> resultTasks = new ArrayList<>();
         List<DayOfWeek> daysOfWeeks = CalendarUtil.daysOfWeekByPeriodParams(periodParameters);
+        int gapWeeks = periodParameters.getGapWeeks();
 
         for (Task t : tasks) {
             while (!daysOfWeeks.contains(date.getDayOfWeek()) && !date.isAfter(endDate)) {
-                date = date.plusDays(1);
+                if (gapWeeks != 0 && date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                    date = date.plusDays(8);
+                } else {
+                    date = date.plusDays(1);
+                }
             }
             if (date.isAfter(endDate)) {
                 break;
             }
             setTaskProperties(t, date);
-            date = date.plusDays(1);
             resultTasks.add(t);
+
+            if (gapWeeks != 0 && date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                date = date.plusDays(8);
+            } else {
+                date = date.plusDays(1);
+            }
         }
 
         if (date.isBefore(endDate) || date.isEqual(endDate)) {
@@ -188,17 +220,26 @@ public class PeriodFacade {
         List<Task> tasks = new ArrayList<>();
         int dayNumber = periodParameters.getDayOfMonth();
         LocalDate date = start;
+        int gapMonths = periodParameters.getGapMonths();
 
         while (date.isBefore(end) || date.isEqual(end)) {
             try {
                 date = date.withDayOfMonth(dayNumber);
             } catch (DateTimeException e) {
-                date = date.plusMonths(1);
+                if (gapMonths != 0) {
+                    date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                } else {
+                    date = date.withDayOfMonth(1).plusMonths(1);
+                }
                 continue;
             }
 
             if (date.isBefore(start)) {
-                date = date.plusMonths(1);
+                if (gapMonths != 0) {
+                    date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                } else {
+                    date = date.withDayOfMonth(1).plusMonths(1);
+                }
                 continue;
             }
 
@@ -210,7 +251,12 @@ public class PeriodFacade {
             task.setClient(client);
 
             tasks.add(task);
-            date = date.plusMonths(1);
+
+            if (gapMonths != 0) {
+                date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+            } else {
+                date = date.withDayOfMonth(1).plusMonths(1);
+            }
         }
 
         return tasks;
@@ -220,18 +266,27 @@ public class PeriodFacade {
         LocalDate date = startDate;
         List<Task> resultTasks = new ArrayList<>();
         int dayNumber = periodParameters.getDayOfMonth();
+        int gapMonths = periodParameters.getGapMonths();
 
         for (Task t : tasks) {
             while (date.getDayOfMonth() != dayNumber && !date.isAfter(endDate) || date.isBefore(startDate)) {
                 try {
                     date = date.withDayOfMonth(dayNumber);
                 } catch (DateTimeException e) {
-                    date = date.plusMonths(1);
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                    } else {
+                        date = date.withDayOfMonth(1).plusMonths(1);
+                    }
                     continue;
                 }
 
                 if (date.isBefore(startDate)) {
-                    date = date.plusMonths(1);
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                    } else {
+                        date = date.withDayOfMonth(1).plusMonths(1);
+                    }
                 }
             }
 
@@ -239,8 +294,13 @@ public class PeriodFacade {
                 break;
             }
             setTaskProperties(t, date);
-            date = date.plusMonths(1);
             resultTasks.add(t);
+
+            if (gapMonths != 0) {
+                date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+            } else {
+                date = date.withDayOfMonth(1).plusMonths(1);
+            }
         }
 
         if (date.isBefore(endDate) || date.isEqual(endDate)) {
@@ -257,6 +317,7 @@ public class PeriodFacade {
         int monthValue = date.getMonthValue();
         LocalDate[][] calendar = CalendarUtil.calendarByLocalDate(date);
         List<LocalDate> nWeek = new ArrayList<>();
+        int gapMonths = periodParameters.getGapMonths();
 
         while (date.isBefore(end) || date.isEqual(end)) {
             if (date.getMonthValue() != monthValue) {
@@ -315,7 +376,11 @@ public class PeriodFacade {
                 tasks.add(task);
             }
 
-            date = date.plusMonths(1).withDayOfMonth(1);
+            if (gapMonths != 0) {
+                date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+            } else {
+                date = date.withDayOfMonth(1).plusMonths(1);
+            }
         }
 
         return tasks;
@@ -331,6 +396,7 @@ public class PeriodFacade {
         DayOfWeek dayOfWeek = CalendarUtil.parseString(periodParameters.getDayOfWeek());
         LocalDate date = start;
         int currentMonth = date.getMonthValue();
+        int gapMonths = periodParameters.getGapMonths();
 
         while (date.isBefore(end) || date.isEqual(end)) {
             if (numberDayOfWeek.equals("first")) {
@@ -338,29 +404,49 @@ public class PeriodFacade {
             } else if (numberDayOfWeek.equals("second")) {
                 date = date.with(TemporalAdjusters.dayOfWeekInMonth(2, dayOfWeek));
                 if (date.getMonthValue() != currentMonth) {
-                    date = date.withDayOfMonth(1);
-                    currentMonth = currentMonth % 12 + 1;
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                        currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                    } else {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                    }
                     continue;
                 }
             } else if (numberDayOfWeek.equals("third")) {
                 date = date.with(TemporalAdjusters.dayOfWeekInMonth(3, dayOfWeek));
                 if (date.getMonthValue() != currentMonth) {
-                    date = date.withDayOfMonth(1);
-                    currentMonth = currentMonth % 12 + 1;
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                        currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                    } else {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                    }
                     continue;
                 }
             } else if (numberDayOfWeek.equals("fourth")) {
                 date = date.with(TemporalAdjusters.dayOfWeekInMonth(4, dayOfWeek));
                 if (date.getMonthValue() != currentMonth) {
-                    date = date.withDayOfMonth(1);
-                    currentMonth = currentMonth % 12 + 1;
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                        currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                    } else {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                    }
                     continue;
                 }
             } else if (numberDayOfWeek.equals("fifth")) {
                 date = date.with(TemporalAdjusters.dayOfWeekInMonth(5, dayOfWeek));
                 if (date.getMonthValue() != currentMonth) {
-                    date = date.withDayOfMonth(1);
-                    currentMonth = currentMonth % 12 + 1;
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                        currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                    } else {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                    }
                     continue;
                 }
             } else if (numberDayOfWeek.equals("last")) {
@@ -368,8 +454,13 @@ public class PeriodFacade {
             }
 
             if (date.isBefore(start)) {
-                date = date.withDayOfMonth(1).plusMonths(1);
-                currentMonth = currentMonth % 12 + 1;
+                if (gapMonths != 0) {
+                    date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                    currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                } else {
+                    date = date.withDayOfMonth(1).plusMonths(1);
+                    currentMonth = currentMonth % 12 + 1;
+                }
                 continue;
             }
 
@@ -381,8 +472,14 @@ public class PeriodFacade {
             task.setClient(client);
 
             tasks.add(task);
-            date = date.withDayOfMonth(1).plusMonths(1);
-            currentMonth = currentMonth % 12 + 1;
+
+            if (gapMonths != 0) {
+                date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                currentMonth = (currentMonth+gapMonths) % 12 + 1;
+            } else {
+                date = date.withDayOfMonth(1).plusMonths(1);
+                currentMonth = currentMonth % 12 + 1;
+            }
         }
 
         return tasks;
@@ -394,6 +491,7 @@ public class PeriodFacade {
         String numberDayOfWeek = periodParameters.getNumberDayOfWeek();
         DayOfWeek dayOfWeek = CalendarUtil.parseString(periodParameters.getDayOfWeek());
         int currentMonth = date.getMonthValue();
+        int gapMonths = periodParameters.getGapMonths();
 
         for (Task t : tasks) {
             while (date.getDayOfWeek() != dayOfWeek && !date.isAfter(endDate) || date.isBefore(startDate)) {
@@ -402,29 +500,49 @@ public class PeriodFacade {
                 } else if (numberDayOfWeek.equals("second")) {
                     date = date.with(TemporalAdjusters.dayOfWeekInMonth(2, dayOfWeek));
                     if (date.getMonthValue() != currentMonth) {
-                        date = date.withDayOfMonth(1);
-                        currentMonth = currentMonth % 12 + 1;
+                        if (gapMonths != 0) {
+                            date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                            currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                        } else {
+                            date = date.withDayOfMonth(1);
+                            currentMonth = currentMonth % 12 + 1;
+                        }
                         continue;
                     }
                 } else if (numberDayOfWeek.equals("third")) {
                     date = date.with(TemporalAdjusters.dayOfWeekInMonth(3, dayOfWeek));
                     if (date.getMonthValue() != currentMonth) {
-                        date = date.withDayOfMonth(1);
-                        currentMonth = currentMonth % 12 + 1;
+                        if (gapMonths != 0) {
+                            date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                            currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                        } else {
+                            date = date.withDayOfMonth(1);
+                            currentMonth = currentMonth % 12 + 1;
+                        }
                         continue;
                     }
                 } else if (numberDayOfWeek.equals("fourth")) {
                     date = date.with(TemporalAdjusters.dayOfWeekInMonth(4, dayOfWeek));
                     if (date.getMonthValue() != currentMonth) {
-                        date = date.withDayOfMonth(1);
-                        currentMonth = currentMonth % 12 + 1;
+                        if (gapMonths != 0) {
+                            date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                            currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                        } else {
+                            date = date.withDayOfMonth(1);
+                            currentMonth = currentMonth % 12 + 1;
+                        }
                         continue;
                     }
                 } else if (numberDayOfWeek.equals("fifth")) {
                     date = date.with(TemporalAdjusters.dayOfWeekInMonth(5, dayOfWeek));
                     if (date.getMonthValue() != currentMonth) {
-                        date = date.withDayOfMonth(1);
-                        currentMonth = currentMonth % 12 + 1;
+                        if (gapMonths != 0) {
+                            date = date.withDayOfMonth(1).plusMonths(gapMonths);
+                            currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                        } else {
+                            date = date.withDayOfMonth(1);
+                            currentMonth = currentMonth % 12 + 1;
+                        }
                         continue;
                     }
                 } else if (numberDayOfWeek.equals("last")) {
@@ -432,8 +550,13 @@ public class PeriodFacade {
                 }
 
                 if (date.isBefore(startDate)) {
-                    date = date.withDayOfMonth(1).plusMonths(1);
-                    currentMonth = currentMonth % 12 + 1;
+                    if (gapMonths != 0) {
+                        date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                        currentMonth = (currentMonth+gapMonths) % 12 + 1;
+                    } else {
+                        date = date.withDayOfMonth(1).plusMonths(1);
+                        currentMonth = currentMonth % 12 + 1;
+                    }
                 }
             }
 
@@ -441,8 +564,15 @@ public class PeriodFacade {
                 break;
             }
             setTaskProperties(t, date);
-            date = date.withDayOfMonth(1).plusMonths(1);
             resultTasks.add(t);
+
+            if (gapMonths != 0) {
+                date = date.withDayOfMonth(1).plusMonths(1 + gapMonths);
+                currentMonth = (currentMonth+gapMonths) % 12 + 1;
+            } else {
+                date = date.withDayOfMonth(1).plusMonths(1);
+                currentMonth = currentMonth % 12 + 1;
+            }
         }
 
         if (date.isBefore(endDate) || date.isEqual(endDate)) {

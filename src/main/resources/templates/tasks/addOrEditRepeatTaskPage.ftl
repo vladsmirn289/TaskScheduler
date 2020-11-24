@@ -82,6 +82,28 @@
                     <option class="each_day_of_week_of_month_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
                         Каждый день недели месяца
                     </option>
+
+                    <!-- With gaps -->
+
+                    <option class="each_n_days_opt" value="EACH_DAY">
+                        Через n дней
+                    </option>
+
+                    <option class="each_n_weeks_opt" value="EACH_WEEK">
+                        Через n недель
+                    </option>
+
+                    <option class="each_n_month_with_day_opt" value="EACH_DAY_OF_MONTH">
+                        Каждый день месяца через n месяцев
+                    </option>
+
+                    <option class="each_n_month_with_week_opt" value="EACH_WEEK_OF_MONTH">
+                        Каждую неделю месяца через n месяцев
+                    </option>
+
+                    <option class="each_n_month_with_week_and_day_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
+                        Каждый день недели месяца через n месяцев
+                    </option>
                 </select>
 
                 <div id="period_res" class="mt-2">
@@ -105,25 +127,25 @@
             let days_of_week = "<label for='mon'>Пн</label>\n" +
                 "                    <input type='checkbox' id='mon' name='monday'/>\n" +
                 "\n" +
-                "                    <label for='tue'>Вт</label>\n" +
+                "                    <label class='ml-1' for='tue'>Вт</label>\n" +
                 "                    <input type='checkbox' id='tue' name='tuesday'/>\n" +
                 "\n" +
-                "                    <label for='wed'>Ср</label>\n" +
+                "                    <label class='ml-1' for='wed'>Ср</label>\n" +
                 "                    <input type='checkbox' id='wed' name='wednesday'/>\n" +
                 "\n" +
-                "                    <label for='thu'>Чт</label>\n" +
+                "                    <label class='ml-1' for='thu'>Чт</label>\n" +
                 "                    <input type='checkbox' id='thu' name='thursday'/>\n" +
                 "\n" +
-                "                    <label for='fri'>Пт</label>\n" +
+                "                    <label class='ml-1' for='fri'>Пт</label>\n" +
                 "                    <input type='checkbox' id='fri' name='friday'/>\n" +
                 "\n" +
-                "                    <label for='sat'>Сб</label>\n" +
+                "                    <label class='ml-1' for='sat'>Сб</label>\n" +
                 "                    <input type='checkbox' id='sat' name='saturday'/>\n" +
                 "\n" +
-                "                    <label for='sun'>Вс</label>\n" +
+                "                    <label class='ml-1' for='sun'>Вс</label>\n" +
                 "                    <input type='checkbox' id='sun' name='sunday'/>";
 
-            let day_of_month = "<label for='dayNum'></label> " +
+            let day_of_month = "<label for='dayNum'>Число месяца</label> " +
                 "<input type='number' min='1' max='31' id='dayNum' name='dayOfMonth'/>";
 
             let week_of_month = "<select name='monthWeek' class='form-control mx-auto' style='width: 50%'>" +
@@ -137,11 +159,11 @@
                 "</select>"
 
             let day_of_week_of_month = "<select name='numberDayOfWeek' class='form-control mx-auto' style='width: 50%'>" +
-                "<option value='first'>1</option>" +
-                "<option value='second'>2</option>" +
-                "<option value='third'>3</option>" +
-                "<option value='fourth'>4</option>" +
-                "<option value='fifth'>5</option>" +
+                "<option value='first'>1-ый/ая/ое</option>" +
+                "<option value='second'>2-ый/ая/ое</option>" +
+                "<option value='third'>3-ый/ая/ое</option>" +
+                "<option value='fourth'>4-ый/ая/ое</option>" +
+                "<option value='fifth'>5-ый/ая/ое</option>" +
                 "<option value='last'>Последний/яя/ее</option>" +
                 "</select>" +
                 "" +
@@ -155,6 +177,21 @@
                 "<option value='sunday'>Вс</option>" +
                 "</select>"
 
+            let each_n_days = "<label for='each_n_days' class='mr-1'>Через</label>" +
+                "<input type='number' id='each_n_days' name='gapDays' min='1'/>"
+
+            let each_n_weeks = "<label for='each_n_weeks' class='mr-1'>Через</label>" +
+                "<input type='number' id='each_n_weeks' name='gapWeeks' min='1'/></br>" + days_of_week
+
+            let each_n_month_with_day = "<label for='each_n_month_with_day' class='mr-1'>Через</label>" +
+                "<input type='number' min='1' id='each_n_month_with_day' name='gapMonths'/></br>" + day_of_month
+
+            let each_n_month_with_week = "<label for='each_n_month_with_week' class='mr-1'>Через</label>" +
+                "<input type='number' min='1' id='each_n_month_with_week' name='gapMonths'/></br>" + week_of_month
+
+            let each_n_month_with_week_and_day = "<label for='each_n_month_with_week_and_day' class='mr-1'>Через</label>" +
+                "<input type='number' min='1' id='each_n_month_with_week_and_day' name='gapMonths'/></br>" + day_of_week_of_month
+
             $('#inputPeriodMode').change(function() {
                 if ($('#inputPeriodMode option:selected').hasClass("each_day_opt")) {
                     $("#period_res").html("")
@@ -166,6 +203,16 @@
                     $("#period_res").html(week_of_month)
                 } else if ($('#inputPeriodMode option:selected').hasClass("each_day_of_week_of_month_opt")) {
                     $("#period_res").html(day_of_week_of_month)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_n_days_opt")) {
+                    $("#period_res").html(each_n_days)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_n_weeks_opt")) {
+                    $("#period_res").html(each_n_weeks)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_n_month_with_day_opt")) {
+                    $("#period_res").html(each_n_month_with_day)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_n_month_with_week_opt")) {
+                    $("#period_res").html(each_n_month_with_week)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_n_month_with_week_and_day_opt")) {
+                    $("#period_res").html(each_n_month_with_week_and_day)
                 }
             })
         })

@@ -15,6 +15,10 @@ public class PeriodParameters {
     private String numberDayOfWeek;
     private String dayOfWeek;
 
+    private int gapDays;
+    private int gapWeeks;
+    private int gapMonths;
+
     public boolean isMonday() {
         return monday;
     }
@@ -101,5 +105,29 @@ public class PeriodParameters {
 
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+
+    public int getGapDays() {
+        return gapDays;
+    }
+
+    public void setGapDays(int gapDays) {
+        this.gapDays = gapDays;
+    }
+
+    public int getGapWeeks() {
+        return gapWeeks;
+    }
+
+    public void setGapWeeks(int gapWeeks) {
+        this.gapWeeks = gapWeeks;
+    }
+
+    public int getGapMonths() {
+        return gapMonths;
+    }
+
+    public void setGapMonths(int gapMonths) {
+        this.gapMonths = gapMonths;
     }
 }
