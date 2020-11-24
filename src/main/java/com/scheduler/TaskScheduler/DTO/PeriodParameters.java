@@ -12,6 +12,8 @@ public class PeriodParameters {
     private int dayOfMonth;
 
     private String monthWeek;
+    private String numberDayOfWeek;
+    private String dayOfWeek;
 
     public boolean isMonday() {
         return monday;
@@ -83,5 +85,21 @@ public class PeriodParameters {
 
     public void setMonthWeek(String monthWeek) {
         this.monthWeek = monthWeek;
+    }
+
+    public String getNumberDayOfWeek() {
+        return numberDayOfWeek;
+    }
+
+    public void setNumberDayOfWeek(String numberDayOfWeek) {
+        this.numberDayOfWeek = numberDayOfWeek;
+    }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 }

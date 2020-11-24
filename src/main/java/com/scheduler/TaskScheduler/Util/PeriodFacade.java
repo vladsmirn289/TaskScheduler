@@ -6,6 +6,7 @@ import com.scheduler.TaskScheduler.Model.*;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,8 @@ public class PeriodFacade {
             tasks = createTasksOnEachDayOfMonth(startDate, endDate);
         } else if (periodMode.equals(PeriodMode.EACH_WEEK_OF_MONTH)) {
             tasks = createTasksOnEachWeekOfMonth(startDate, endDate);
+        } else if (periodMode.equals(PeriodMode.EACH_DAY_OF_WEEK_OF_MONTH)) {
+            tasks = createTasksOnEachDayOfWeekOfMonth(startDate, endDate);
         }
 
         repeatableTask.setTasks(tasks);
@@ -87,6 +90,8 @@ public class PeriodFacade {
             repeatableTask.setTasks(updateTasksOnEachDayOfMonth(tasks));
         } else if (periodMode.equals(PeriodMode.EACH_WEEK_OF_MONTH)) {
             repeatableTask.setTasks(updateTasksOnEachWeekOfMonth());
+        } else if (periodMode.equals(PeriodMode.EACH_DAY_OF_WEEK_OF_MONTH)) {
+            repeatableTask.setTasks(updateTasksOnEachDayOfWeekOfMonth(tasks));
         }
 
         return repeatableTask;
@@ -318,5 +323,132 @@ public class PeriodFacade {
 
     private List<Task> updateTasksOnEachWeekOfMonth() {
         return createTasksOnEachWeekOfMonth(startDate, endDate);
+    }
+
+    private List<Task> createTasksOnEachDayOfWeekOfMonth(LocalDate start, LocalDate end) {
+        List<Task> tasks = new ArrayList<>();
+        String numberDayOfWeek = periodParameters.getNumberDayOfWeek();
+        DayOfWeek dayOfWeek = CalendarUtil.parseString(periodParameters.getDayOfWeek());
+        LocalDate date = start;
+        int currentMonth = date.getMonthValue();
+
+        while (date.isBefore(end) || date.isEqual(end)) {
+            if (numberDayOfWeek.equals("first")) {
+                date = date.with(TemporalAdjusters.firstInMonth(dayOfWeek));
+            } else if (numberDayOfWeek.equals("second")) {
+                date = date.with(TemporalAdjusters.dayOfWeekInMonth(2, dayOfWeek));
+                if (date.getMonthValue() != currentMonth) {
+                    date = date.withDayOfMonth(1);
+                    currentMonth = currentMonth % 12 + 1;
+                    continue;
+                }
+            } else if (numberDayOfWeek.equals("third")) {
+                date = date.with(TemporalAdjusters.dayOfWeekInMonth(3, dayOfWeek));
+                if (date.getMonthValue() != currentMonth) {
+                    date = date.withDayOfMonth(1);
+                    currentMonth = currentMonth % 12 + 1;
+                    continue;
+                }
+            } else if (numberDayOfWeek.equals("fourth")) {
+                date = date.with(TemporalAdjusters.dayOfWeekInMonth(4, dayOfWeek));
+                if (date.getMonthValue() != currentMonth) {
+                    date = date.withDayOfMonth(1);
+                    currentMonth = currentMonth % 12 + 1;
+                    continue;
+                }
+            } else if (numberDayOfWeek.equals("fifth")) {
+                date = date.with(TemporalAdjusters.dayOfWeekInMonth(5, dayOfWeek));
+                if (date.getMonthValue() != currentMonth) {
+                    date = date.withDayOfMonth(1);
+                    currentMonth = currentMonth % 12 + 1;
+                    continue;
+                }
+            } else if (numberDayOfWeek.equals("last")) {
+                date = date.with(TemporalAdjusters.lastInMonth(dayOfWeek));
+            }
+
+            if (date.isBefore(start)) {
+                date = date.withDayOfMonth(1).plusMonths(1);
+                currentMonth = currentMonth % 12 + 1;
+                continue;
+            }
+
+            if (date.isAfter(end)) {
+                break;
+            }
+
+            Task task = new Task(name, description, priority, date, 0);
+            task.setClient(client);
+
+            tasks.add(task);
+            date = date.withDayOfMonth(1).plusMonths(1);
+            currentMonth = currentMonth % 12 + 1;
+        }
+
+        return tasks;
+    }
+
+    private List<Task> updateTasksOnEachDayOfWeekOfMonth(List<Task> tasks) {
+        LocalDate date = startDate;
+        List<Task> resultTasks = new ArrayList<>();
+        String numberDayOfWeek = periodParameters.getNumberDayOfWeek();
+        DayOfWeek dayOfWeek = CalendarUtil.parseString(periodParameters.getDayOfWeek());
+        int currentMonth = date.getMonthValue();
+
+        for (Task t : tasks) {
+            while (date.getDayOfWeek() != dayOfWeek && !date.isAfter(endDate) || date.isBefore(startDate)) {
+                if (numberDayOfWeek.equals("first")) {
+                    date = date.with(TemporalAdjusters.firstInMonth(dayOfWeek));
+                } else if (numberDayOfWeek.equals("second")) {
+                    date = date.with(TemporalAdjusters.dayOfWeekInMonth(2, dayOfWeek));
+                    if (date.getMonthValue() != currentMonth) {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                        continue;
+                    }
+                } else if (numberDayOfWeek.equals("third")) {
+                    date = date.with(TemporalAdjusters.dayOfWeekInMonth(3, dayOfWeek));
+                    if (date.getMonthValue() != currentMonth) {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                        continue;
+                    }
+                } else if (numberDayOfWeek.equals("fourth")) {
+                    date = date.with(TemporalAdjusters.dayOfWeekInMonth(4, dayOfWeek));
+                    if (date.getMonthValue() != currentMonth) {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                        continue;
+                    }
+                } else if (numberDayOfWeek.equals("fifth")) {
+                    date = date.with(TemporalAdjusters.dayOfWeekInMonth(5, dayOfWeek));
+                    if (date.getMonthValue() != currentMonth) {
+                        date = date.withDayOfMonth(1);
+                        currentMonth = currentMonth % 12 + 1;
+                        continue;
+                    }
+                } else if (numberDayOfWeek.equals("last")) {
+                    date = date.with(TemporalAdjusters.lastInMonth(dayOfWeek));
+                }
+
+                if (date.isBefore(startDate)) {
+                    date = date.withDayOfMonth(1).plusMonths(1);
+                    currentMonth = currentMonth % 12 + 1;
+                }
+            }
+
+            if (date.isAfter(endDate)) {
+                break;
+            }
+            setTaskProperties(t, date);
+            date = date.withDayOfMonth(1).plusMonths(1);
+            resultTasks.add(t);
+        }
+
+        if (date.isBefore(endDate) || date.isEqual(endDate)) {
+            resultTasks.addAll(createTasksOnEachDayOfWeekOfMonth(date, endDate));
+        }
+
+        return resultTasks;
     }
 }

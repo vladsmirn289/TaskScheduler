@@ -97,4 +97,36 @@ public class CalendarUtil {
 
         return dayOfWeeks;
     }
+
+    public static DayOfWeek parseString(String weekDay) {
+        if (weekDay.equals("monday")) {
+            return DayOfWeek.MONDAY;
+        }
+
+        if (weekDay.equals("tuesday")) {
+            return DayOfWeek.TUESDAY;
+        }
+
+        if (weekDay.equals("wednesday")) {
+            return  DayOfWeek.WEDNESDAY;
+        }
+
+        if (weekDay.equals("thursday")) {
+            return DayOfWeek.THURSDAY;
+        }
+
+        if (weekDay.equals("friday")) {
+            return DayOfWeek.FRIDAY;
+        }
+
+        if (weekDay.equals("saturday")) {
+            return  DayOfWeek.SATURDAY;
+        }
+
+        if (weekDay.equals("sunday")) {
+            return DayOfWeek.SUNDAY;
+        }
+
+        throw new IllegalArgumentException("Invalid day of week");
+    }
 }

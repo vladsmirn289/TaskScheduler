@@ -78,6 +78,10 @@
                     <option class="each_week_of_month_opt" value="EACH_WEEK_OF_MONTH">
                         Каждую неделю месяца
                     </option>
+
+                    <option class="each_day_of_week_of_month_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
+                        Каждый день недели месяца
+                    </option>
                 </select>
 
                 <div id="period_res" class="mt-2">
@@ -122,7 +126,7 @@
             let day_of_month = "<label for='dayNum'></label> " +
                 "<input type='number' min='1' max='31' id='dayNum' name='dayOfMonth'/>";
 
-            let week_of_month = "<select name='monthWeek' class='form-control mx-auto'>" +
+            let week_of_month = "<select name='monthWeek' class='form-control mx-auto' style='width: 50%'>" +
                 "<option value='first'>Первая неделя месяца</option>" +
                 "<option value='second'>Вторая неделя месяца</option>" +
                 "<option value='third'>Третья неделя месяца</option>" +
@@ -130,6 +134,25 @@
                 "<option value='fifth'>Пятая неделя месяца</option>" +
                 "<option value='sixth'>Шестая неделя месяца</option>" +
                 "<option value='last'>Последняя неделя месяца</option>" +
+                "</select>"
+
+            let day_of_week_of_month = "<select name='numberDayOfWeek' class='form-control mx-auto' style='width: 50%'>" +
+                "<option value='first'>1</option>" +
+                "<option value='second'>2</option>" +
+                "<option value='third'>3</option>" +
+                "<option value='fourth'>4</option>" +
+                "<option value='fifth'>5</option>" +
+                "<option value='last'>Последний/яя/ее</option>" +
+                "</select>" +
+                "" +
+                "<select name='dayOfWeek' class='form-control mx-auto' style='width: 50%'>" +
+                "<option value='monday'>Пн</option>" +
+                "<option value='tuesday'>Вт</option>" +
+                "<option value='wednesday'>Ср</option>" +
+                "<option value='thursday'>Чт</option>" +
+                "<option value='friday'>Пт</option>" +
+                "<option value='saturday'>Сб</option>" +
+                "<option value='sunday'>Вс</option>" +
                 "</select>"
 
             $('#inputPeriodMode').change(function() {
@@ -141,6 +164,8 @@
                     $("#period_res").html(day_of_month)
                 } else if ($('#inputPeriodMode option:selected').hasClass("each_week_of_month_opt")) {
                     $("#period_res").html(week_of_month)
+                } else if ($('#inputPeriodMode option:selected').hasClass("each_day_of_week_of_month_opt")) {
+                    $("#period_res").html(day_of_week_of_month)
                 }
             })
         })
