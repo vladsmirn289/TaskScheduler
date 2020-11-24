@@ -6,9 +6,8 @@ import com.scheduler.TaskScheduler.Model.*;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PeriodFacade {
     private RepeatableTask repeatableTask;
@@ -68,6 +67,8 @@ public class PeriodFacade {
             tasks = createTasksOnEachWeek(startDate, endDate);
         } else if (periodMode.equals(PeriodMode.EACH_DAY_OF_MONTH)) {
             tasks = createTasksOnEachDayOfMonth(startDate, endDate);
+        } else if (periodMode.equals(PeriodMode.EACH_WEEK_OF_MONTH)) {
+            tasks = createTasksOnEachWeekOfMonth(startDate, endDate);
         }
 
         repeatableTask.setTasks(tasks);
@@ -84,6 +85,8 @@ public class PeriodFacade {
             repeatableTask.setTasks(updateTasksOnEachWeek(tasks));
         } else if (periodMode.equals(PeriodMode.EACH_DAY_OF_MONTH)) {
             repeatableTask.setTasks(updateTasksOnEachDayOfMonth(tasks));
+        } else if (periodMode.equals(PeriodMode.EACH_WEEK_OF_MONTH)) {
+            repeatableTask.setTasks(updateTasksOnEachWeekOfMonth());
         }
 
         return repeatableTask;
@@ -240,5 +243,80 @@ public class PeriodFacade {
         }
 
         return resultTasks;
+    }
+
+    private List<Task> createTasksOnEachWeekOfMonth(LocalDate start, LocalDate end) {
+        List<Task> tasks = new ArrayList<>();
+        String monthWeek = periodParameters.getMonthWeek();
+        LocalDate date = start;
+        int monthValue = date.getMonthValue();
+        LocalDate[][] calendar = CalendarUtil.calendarByLocalDate(date);
+        List<LocalDate> nWeek = new ArrayList<>();
+
+        while (date.isBefore(end) || date.isEqual(end)) {
+            if (date.getMonthValue() != monthValue) {
+                calendar = CalendarUtil.calendarByLocalDate(date);
+            }
+
+            if (monthWeek.equals("first")) {
+                if (calendar.length >= 1) {
+                    nWeek = Arrays.stream(calendar[0])
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                }
+            } else if (monthWeek.equals("second")) {
+                if (calendar.length >= 2) {
+                    nWeek = Arrays.stream(calendar[1])
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                }
+            } else if (monthWeek.equals("third")) {
+                if (calendar.length >= 3) {
+                    nWeek = Arrays.stream(calendar[2])
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                }
+            } else if (monthWeek.equals("fourth")) {
+                if (calendar.length >= 4) {
+                    nWeek = Arrays.stream(calendar[3])
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                }
+            } else if (monthWeek.equals("fifth")) {
+                if (calendar.length >= 5) {
+                    nWeek = Arrays.stream(calendar[4])
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                }
+            } else if (monthWeek.equals("sixth")) {
+                if (calendar.length >= 6) {
+                    nWeek = Arrays.stream(calendar[5])
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+                }
+            } else if (monthWeek.equals("last")) {
+                nWeek = Arrays.stream(calendar[calendar.length-1])
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+            }
+
+            nWeek = nWeek.stream().filter(d -> d.isBefore(end) || d.isEqual(end))
+                    .collect(Collectors.toList());
+
+            Task task;
+            for (LocalDate d : nWeek) {
+                task = new Task(name, description, priority, d, 0);
+                task.setClient(client);
+                tasks.add(task);
+            }
+
+            date = date.plusMonths(1).withDayOfMonth(1);
+        }
+
+        return tasks;
+    }
+
+    private List<Task> updateTasksOnEachWeekOfMonth() {
+        return createTasksOnEachWeekOfMonth(startDate, endDate);
     }
 }

@@ -19,6 +19,7 @@ public class CalendarUtil {
     public static LocalDate[][] calendarByLocalDate(LocalDate localDate) {
         logger.info("CalendarByLocalDate method is called");
 
+        localDate = localDate.withDayOfMonth(1);
         int lastDayOfMonth = localDate.plusMonths(1).minusDays(1).getDayOfMonth();
         int daysInFirstWeek = 8-localDate.getDayOfWeek().getValue();
         int rows = 1 + (int)Math.ceil((lastDayOfMonth - daysInFirstWeek)/7.0);

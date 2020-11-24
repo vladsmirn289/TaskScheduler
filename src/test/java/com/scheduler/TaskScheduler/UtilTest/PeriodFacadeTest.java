@@ -431,4 +431,156 @@ public class PeriodFacadeTest {
         checkParams(task5, LocalDate.of(2020, 8, 31),
                 "New name", "New description", Priority.HIGH, 0);
     }
+
+    @Test
+    public void shouldInitTasksWithEachWeekOfMonthPeriod() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonthWeek("third");
+
+        repeatableTask.setStartDate(LocalDate.of(2020, 11, 1));
+        repeatableTask.setEndDate(LocalDate.of(2020, 11, 30));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK_OF_MONTH);
+
+        periodFacade.setRepeatableTask(repeatableTask);
+        periodFacade.setPeriodParameters(periodParameters);
+        RepeatableTask rt = periodFacade.initTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(7);
+
+        Task first = tasks.get(0);
+        checkParams(first, LocalDate.of(2020, 11, 9),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+
+        Task last = tasks.get(6);
+        checkParams(last, LocalDate.of(2020, 11, 15),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+
+        periodParameters.setMonthWeek("first");
+        rt = periodFacade.initTasks();
+        tasks = rt.getTasks();
+        assertThat(tasks.size()).isEqualTo(1);
+
+        first = tasks.get(0);
+        checkParams(first, LocalDate.of(2020, 11, 1),
+                "RT1", "RD1", Priority.MEDIUM, 0);
+
+        periodParameters.setMonthWeek("sixth");
+        repeatableTask.setStartDate(LocalDate.of(2020, 12, 1));
+        repeatableTask.setStartDate(LocalDate.of(2020, 12, 31));
+        periodFacade.setRepeatableTask(repeatableTask);
+        rt = periodFacade.initTasks();
+        tasks = rt.getTasks();
+        assertThat(tasks.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldUpdateTasksWithEachWeekOfMonthPeriod() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonthWeek("second");
+
+        repeatableTask.setStartDate(LocalDate.of(2020, 1, 1));
+        repeatableTask.setEndDate(LocalDate.of(2020, 1, 31));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK_OF_MONTH);
+        RepeatableTask rt = periodFacade.initTasks();
+
+        PeriodParameters periodParameters2 = new PeriodParameters();
+        periodParameters2.setMonthWeek("third");
+
+        rt.setDescription("New description");
+        rt.setName("New name");
+        rt.setPriority(Priority.HIGH);
+
+        periodFacade.setRepeatableTask(rt);
+        periodFacade.setPeriodParameters(periodParameters2);
+        rt = periodFacade.updateTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(7);
+
+        Task first = tasks.get(0);
+        checkParams(first, LocalDate.of(2020, 1, 13),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task last = tasks.get(6);
+        checkParams(last, LocalDate.of(2020, 1, 19),
+                "New name", "New description", Priority.HIGH, 0);
+    }
+
+    @Test
+    public void shouldUpdateTasksWithEachWeekOfMonthPeriodAndDateDecrementing() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonthWeek("second");
+
+        repeatableTask.setStartDate(LocalDate.of(2020, 1, 1));
+        repeatableTask.setEndDate(LocalDate.of(2020, 1, 31));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK_OF_MONTH);
+        periodFacade.setRepeatableTask(repeatableTask);
+        periodFacade.setPeriodParameters(periodParameters);
+        RepeatableTask rt = periodFacade.initTasks();
+        rt.setDescription("New description");
+        rt.setName("New name");
+        rt.setPriority(Priority.HIGH);
+        rt.setEndDate(LocalDate.of(2020, 1, 9));
+
+        periodFacade.setRepeatableTask(rt);
+        rt = periodFacade.updateTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(4);
+
+        Task first = tasks.get(0);
+        checkParams(first, LocalDate.of(2020, 1, 6),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task last = tasks.get(3);
+        checkParams(last, LocalDate.of(2020, 1, 9),
+                "New name", "New description", Priority.HIGH, 0);
+
+        rt.setEndDate(LocalDate.of(2020, 1, 5));
+        periodFacade.setRepeatableTask(rt);
+        rt = periodFacade.updateTasks();
+        tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldUpdateTasksWithEachWeekOfMonthPeriodAndDateIncrementing() {
+        PeriodParameters periodParameters = new PeriodParameters();
+        periodParameters.setMonthWeek("second");
+
+        repeatableTask.setStartDate(LocalDate.of(2020, 1, 1));
+        repeatableTask.setEndDate(LocalDate.of(2020, 1, 31));
+        repeatableTask.setPeriodMode(PeriodMode.EACH_WEEK_OF_MONTH);
+        periodFacade.setRepeatableTask(repeatableTask);
+        periodFacade.setPeriodParameters(periodParameters);
+        RepeatableTask rt = periodFacade.initTasks();
+        rt.setDescription("New description");
+        rt.setName("New name");
+        rt.setPriority(Priority.HIGH);
+        rt.setEndDate(LocalDate.of(2020, 2, 29));
+
+        periodFacade.setRepeatableTask(rt);
+        rt = periodFacade.updateTasks();
+        List<Task> tasks = rt.getTasks();
+        assertThat(tasks).isNotNull();
+        assertThat(tasks.size()).isEqualTo(14);
+
+        Task firstDayOfFirstWeek = tasks.get(0);
+        checkParams(firstDayOfFirstWeek, LocalDate.of(2020, 1, 6),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task lastDayOfFirstWeek = tasks.get(6);
+        checkParams(lastDayOfFirstWeek, LocalDate.of(2020, 1, 12),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task firstDayOfLastWeek = tasks.get(7);
+        checkParams(firstDayOfLastWeek, LocalDate.of(2020, 2, 3),
+                "New name", "New description", Priority.HIGH, 0);
+
+        Task lastDayOfLastWeek = tasks.get(13);
+        checkParams(lastDayOfLastWeek, LocalDate.of(2020, 2, 9),
+                "New name", "New description", Priority.HIGH, 0);
+    }
 }
