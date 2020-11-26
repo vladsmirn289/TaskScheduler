@@ -28,15 +28,48 @@
             <#assign month = "Декабрь">
         </#if>
 
-        <form class="form-inline justify-content-center mb-4" action="/" method="get">
-            <div class="form-group">
-                <input class="form-control" type="month" name="date"/>
-            </div>
+        <div class="form-inline justify-content-center mb-4">
+            <form action="/" method="get">
+                <input type="text" name="date" hidden="hidden"
+                        <#if localDate.minusMonths(1).getMonthValue() gt 9>
+                       value="${localDate.minusMonths(1).getYear()?c}-${localDate.minusMonths(1).getMonthValue()}"/>
+                <#else>
+                    value="${localDate.minusMonths(1).getYear()?c}-0${localDate.minusMonths(1).getMonthValue()}"/>
+                </#if>
 
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">Ok</button>
-            </div>
-        </form>
+                <button class="btn p-0" type="submit">
+                    <img src="https://img.icons8.com/flat_round/40/000000/arrow-left.png" class="d-inline-block align-top" alt="US"/>
+                </button>
+            </form>
+
+            <form class="form-inline ml-3 mr-3" action="/" method="get">
+                <div class="form-group">
+                    <input class="form-control" type="month" name="date"
+                            <#if localDate.getMonthValue() gt 9>
+                           value="${localDate.getYear()?c}-${localDate.getMonthValue()}"/>
+                    <#else>
+                        value="${localDate.getYear()?c}-0${localDate.getMonthValue()}"/>
+                    </#if>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Ok</button>
+                </div>
+            </form>
+
+            <form action="/" method="get">
+                <input type="text" name="date" hidden="hidden"
+                        <#if localDate.plusMonths(1).getMonthValue() gt 9>
+                       value="${localDate.plusMonths(1).getYear()?c}-${localDate.plusMonths(1).getMonthValue()}"/>
+                <#else>
+                    value="${localDate.plusMonths(1).getYear()?c}-0${localDate.plusMonths(1).getMonthValue()}"/>
+                </#if>
+
+                <button class="btn p-0" type="submit">
+                    <img src="https://img.icons8.com/flat_round/40/000000/arrow-right.png" class="d-inline-block align-top" alt="US"/>
+                </button>
+            </form>
+        </div>
 
         <div class="text-center text-white mb-5 h2">
             ${month}, ${localDate.getYear()?string.computer}
