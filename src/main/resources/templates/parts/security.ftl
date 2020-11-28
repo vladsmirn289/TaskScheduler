@@ -9,6 +9,6 @@
     >
 <#else>
     <#assign
-        login_name = "Аноним"
+        login_name = springMacroRequestContext.getMessage("anonymous")
     >
 </#if>

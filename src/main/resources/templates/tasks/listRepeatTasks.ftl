@@ -1,10 +1,11 @@
 <#import "../parts/common.ftl" as c>
+<#import "/spring.ftl" as spring>
 
 <@c.commonPage>
     <div>
         <form class="form-inline justify-content-center mb-4" action="/repeatTask/addTaskPage" method="get">
             <div class="form-group">
-                <button class="btn btn-primary" type="submit">+ Добавить</button>
+                <button class="btn btn-primary" type="submit">+ <@spring.message "add"/></button>
             </div>
         </form>
 
@@ -32,8 +33,8 @@
                     <div class="border-left border-secondary mr-2"></div>
 
                     <div class="col-md-2 mx-auto text-white">
-                        Начало: ${t.getStartDate()}<br/>
-                        Конец: ${t.getEndDate()}
+                        <@spring.message "start"/>: ${t.getStartDate()}<br/>
+                        <@spring.message "end"/>: ${t.getEndDate()}
                     </div>
 
                     <div class="border-left border-secondary mr-2"></div>
@@ -42,14 +43,14 @@
                         <div class="mt-2">
                             <form action="/repeatTask/editPage" method="get">
                                 <input type="text" name="taskId" value="${t.getId()}" hidden="hidden"/>
-                                <button class="btn btn-primary" type="submit">Редактировать</button>
+                                <button class="btn btn-primary" type="submit"><@spring.message "edit"/></button>
                             </form>
 
                             <form class="mt-2" action="/repeatTask/delete" method="post">
                                 <input type="text" name="taskId" value="${t.getId()}" hidden="hidden"/>
 
                                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                                <button class="btn btn-primary" type="submit">Удалить</button>
+                                <button class="btn btn-primary" type="submit"><@spring.message "delete"/></button>
                             </form>
                         </div>
                     </div>

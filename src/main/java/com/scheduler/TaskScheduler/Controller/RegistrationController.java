@@ -34,18 +34,24 @@ public class RegistrationController {
         logger.info("Registration of a client");
         boolean passwordsIsNotMatch = !passwordRepeat.equals(client.getPassword());
         boolean clientExists = clientService.findByLogin(client.getLogin()).isPresent();
+        boolean loginIsEmpty = client.getLogin().isEmpty();
 
-        if (passwordsIsNotMatch || clientExists) {
+        if (passwordsIsNotMatch || clientExists || loginIsEmpty) {
             logger.warn("Registration fail");
 
             if (passwordsIsNotMatch) {
                 logger.warn("Passwords are not match");
-                model.addAttribute("passwordRepeatError", "Пароли не совпадают");
+                model.addAttribute("passwordRepeatError", "");
             }
 
             if (clientExists) {
                 logger.warn("User with the same login is already exists");
-                model.addAttribute("userExistsError", "Пользователь с таким логином уже существует");
+                model.addAttribute("userExistsError", "");
+            }
+
+            if (loginIsEmpty) {
+                logger.warn("Login is empty!");
+                model.addAttribute("loginIsEmpty", "");
             }
 
             model.addAttribute("client", client);

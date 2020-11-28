@@ -1,4 +1,5 @@
 <#import "../parts/common.ftl" as c>
+<#import "/spring.ftl" as spring>
 
 <@c.commonPage>
     <div class="mx-auto bg-dark text-center text-white" style="padding: 15px; width: 50%; border-radius: 10px;">
@@ -8,23 +9,31 @@
             </#if>
 
             <div class="form-group">
-                <label for="taskName">Название задачи</label><br/>
+                <label for="taskName"><@spring.message "task_name"/></label><br/>
                 <input type="text" id="taskName" name="name" style="width: 50%"
                     <#if task??>value="${task.getName()}"</#if>/>
             </div>
 
             <div class="form-group">
-                <label for="taskDesc">Описание задачи</label><br/>
+                <label for="taskDesc"><@spring.message "description"/></label><br/>
                 <textarea rows="5" cols="50" id="taskDesc" name="description"><#if task??>${task.getDescription()}</#if></textarea>
             </div>
 
             <div class="form-group">
-                <label for="inputPriority">Выберите приоритет</label><br/>
+                <label for="inputPriority"><@spring.message "choose_priority"/></label><br/>
                 <select id="inputPriority" name="priority" class="form-control mx-auto" style="width: 50%">
-                    <option value="NO" <#if task?? && "NO" == task.getPriority()>selected="selected"</#if>>Нет</option>
-                    <option value="LOW" <#if task?? && "LOW" == task.getPriority()>selected="selected"</#if>>Низкий</option>
-                    <option value="MEDIUM" <#if task?? && "MEDIUM" == task.getPriority()>selected="selected"</#if>>Средний</option>
-                    <option value="HIGH" <#if task?? && "HIGH" == task.getPriority()>selected="selected"</#if>>Высокий</option>
+                    <option value="NO" <#if task?? && "NO" == task.getPriority()>selected="selected"</#if>>
+                        <@spring.message "no_priority"/>
+                    </option>
+                    <option value="LOW" <#if task?? && "LOW" == task.getPriority()>selected="selected"</#if>>
+                        <@spring.message "low_priority"/>
+                    </option>
+                    <option value="MEDIUM" <#if task?? && "MEDIUM" == task.getPriority()>selected="selected"</#if>>
+                        <@spring.message "medium_priority"/>
+                    </option>
+                    <option value="HIGH" <#if task?? && "HIGH" == task.getPriority()>selected="selected"</#if>>
+                        <@spring.message "high_priority"/>
+                    </option>
                 </select>
             </div>
 
@@ -37,7 +46,7 @@
             </#if>
 
             <div class="form-group">
-                <label for="inputProgress">Прогресс задачи</label><br/>
+                <label for="inputProgress"><@spring.message "task_progress"/></label><br/>
                 <div style="display: inline-block">
                     <input type="number" id="progressValue"
                            <#if task??>value="${task.getProgress()}" <#else>value="0"</#if>
@@ -52,9 +61,9 @@
             <div class="form-group">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <#if task??>
-                    <button class="btn btn-primary" type="submit">Редактировать</button>
+                    <button class="btn btn-primary" type="submit"><@spring.message "edit"/></button>
                 <#else>
-                    <button class="btn btn-primary" type="submit">Создать</button>
+                    <button class="btn btn-primary" type="submit"><@spring.message "create"/></button>
                 </#if>
             </div>
         </form>

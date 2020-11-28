@@ -1,11 +1,11 @@
 <#import "../parts/common.ftl" as c>
+<#import "/spring.ftl" as spring>
 
 <@c.commonPage>
     <div>
         <form class="form-inline justify-content-center mb-4" action="/task/${date}/addTaskPage" method="get">
             <div class="form-group">
-                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <button class="btn btn-primary" type="submit">+ Добавить</button>
+                <button class="btn btn-primary" type="submit">+ <@spring.message "add"/></button>
             </div>
         </form>
 
@@ -46,7 +46,7 @@
                             <input type="text" name="taskCurrentDate" value="${t.getDate()}" hidden="hidden"/>
 
                             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                            <button class="btn btn-primary" type="submit">Перенести на следующую неделю</button>
+                            <button class="btn btn-primary" type="submit"><@spring.message "to_next_week"/></button>
                         </form>
                     </div>
 
@@ -56,7 +56,7 @@
                         <div class="mt-2">
                             <form action="/task/editPage" method="get">
                                 <input type="text" name="taskId" value="${t.getId()}" hidden="hidden"/>
-                                <button class="btn btn-primary" type="submit">Редактировать</button>
+                                <button class="btn btn-primary" type="submit"><@spring.message "edit"/></button>
                             </form>
 
                             <form class="mt-2" action="/task/delete" method="post">
@@ -64,7 +64,7 @@
                                 <input type="text" name="taskCurrentDate" value="${t.getDate()}" hidden="hidden"/>
 
                                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                                <button class="btn btn-primary" type="submit">Удалить</button>
+                                <button class="btn btn-primary" type="submit"><@spring.message "delete"/></button>
                             </form>
                         </div>
                     </div>

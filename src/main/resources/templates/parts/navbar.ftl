@@ -1,4 +1,5 @@
 <#include "security.ftl">
+<#import "/spring.ftl" as spring>
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-success">
     <a class="navbar-brand" href="/">TaskScheduler</a>
@@ -9,25 +10,21 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link " href="/">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link " href="/"><@spring.message "main_page"/> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/repeatTask/list">Повторяемые задачи <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/repeatTask/list"><@spring.message "repeatable_tasks"/> <span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>
 
-    <form class="mr-2" action="/#" method="post">
-        <button class="btn p-0" type="submit">
-            <img src="https://img.icons8.com/color/40/000000/usa-circular.png" class="d-inline-block align-top" alt="US"/>
-        </button>
-    </form>
+    <a class="btn p-0" id="usaLocale" href="" onclick="toUSALocale()">
+        <img src="https://img.icons8.com/color/40/000000/usa-circular.png" class="d-inline-block align-top" alt="US"/>
+    </a>
 
-    <form class="mr-3" action="/#" method="post">
-        <button class="btn p-0">
-            <img src="https://img.icons8.com/color/40/000000/russian-federation-circular.png" class="d-inline-block align-top" alt="RU"/>
-        </button>
-    </form>
+    <a class="btn p-0" id="ruLocale" href="" onclick="toRussianLocale()">
+        <img src="https://img.icons8.com/color/40/000000/russian-federation-circular.png" class="d-inline-block align-top" alt="RU"/>
+    </a>
 
     <div class="navbar-text text-white mr-3">
         ${login_name}
@@ -36,12 +33,44 @@
     <#if isExist>
         <form action="/logout" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <button type="submit" class="btn btn-primary">Выйти</button>
+            <button type="submit" class="btn btn-primary"><@spring.message "logout"/></button>
         </form>
     <#else>
         <form action="/login" method="get">
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <button type="submit" class="btn btn-primary">Войти</button>
+            <button type="submit" class="btn btn-primary"><@spring.message "login"/></button>
         </form>
     </#if>
+
+    <script>
+        function toUSALocale() {
+            let url = window.location.href;
+            if (url.includes("?")) {
+                if (url.includes("lang")) {
+                    let index = url.indexOf("lang");
+                    url = url.slice(0, index)
+                }
+                url+="&lang=US";
+            } else {
+                url+="?lang=US";
+            }
+
+            $("#usaLocale").attr("href", url);
+        }
+
+        function toRussianLocale() {
+            let url = window.location.href;
+            if (url.includes("?")) {
+                if (url.includes("lang")) {
+                    let index = url.indexOf("lang");
+                    url = url.slice(0, index)
+                }
+                url+="&lang=RU";
+            } else {
+                url+="?lang=RU";
+            }
+
+            $("#ruLocale").attr("href", url);
+        }
+    </script>
 </nav>

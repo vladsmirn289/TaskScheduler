@@ -1,31 +1,32 @@
 <#import "parts/common.ftl" as c>
+<#import "/spring.ftl" as spring>
 
 <@c.commonPage>
     <div>
         <#if localDate.getMonthValue() == 1>
-            <#assign month = "Январь">
+            <#assign month = springMacroRequestContext.getMessage("january")>
         <#elseif localDate.getMonthValue() == 2>
-            <#assign month = "Февраль">
+            <#assign month = springMacroRequestContext.getMessage("february")>
         <#elseif localDate.getMonthValue() == 3>
-            <#assign month = "Март">
+            <#assign month = springMacroRequestContext.getMessage("march")>
         <#elseif localDate.getMonthValue() == 4>
-            <#assign month = "Апрель">
+            <#assign month = springMacroRequestContext.getMessage("april")>
         <#elseif localDate.getMonthValue() == 5>
-            <#assign month = "Май">
+            <#assign month = springMacroRequestContext.getMessage("may")>
         <#elseif localDate.getMonthValue() == 6>
-            <#assign month = "Июнь">
+            <#assign month = springMacroRequestContext.getMessage("june")>
         <#elseif localDate.getMonthValue() == 7>
-            <#assign month = "Июль">
+            <#assign month = springMacroRequestContext.getMessage("july")>
         <#elseif localDate.getMonthValue() == 8>
-            <#assign month = "Август">
+            <#assign month = springMacroRequestContext.getMessage("august")>
         <#elseif localDate.getMonthValue() == 9>
-            <#assign month = "Сентябрь">
+            <#assign month = springMacroRequestContext.getMessage("september")>
         <#elseif localDate.getMonthValue() == 10>
-            <#assign month = "Октябрь">
+            <#assign month = springMacroRequestContext.getMessage("october")>
         <#elseif localDate.getMonthValue() == 11>
-            <#assign month = "Ноябрь">
+            <#assign month = springMacroRequestContext.getMessage("november")>
         <#elseif localDate.getMonthValue() == 12>
-            <#assign month = "Декабрь">
+            <#assign month = springMacroRequestContext.getMessage("december")>
         </#if>
 
         <div class="form-inline justify-content-center mb-4">
@@ -79,13 +80,13 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Пн</th>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Вт</th>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Ср</th>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Чт</th>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Пт</th>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Сб</th>
-                    <th scope="col" class="text-center" style="background-color: #17a2b8">Вс</th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "mon"/></th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "tue"/></th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "wed"/></th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "thu"/></th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "fri"/></th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "sat"/></th>
+                    <th scope="col" class="text-center" style="background-color: #17a2b8"><@spring.message "sun"/></th>
                 </tr>
             </thead>
             <tbody>
