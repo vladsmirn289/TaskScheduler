@@ -120,12 +120,11 @@ public class Client implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return password.equals(client.password) &&
-                login.equals(client.login);
+        return login.equals(client.login);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(password, login);
+        return Objects.hash(login);
     }
 }

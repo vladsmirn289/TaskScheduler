@@ -36,11 +36,11 @@ public class LoginControllerTest {
     @Test
     public void showLoginPageWithErrorAttributeTest() throws Exception {
         mockMvc
-                .perform(get("/login").param("error", ""))
+                .perform(get("/login?lang=US").param("error", ""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("authentication/loginPage"))
-                .andExpect(content().string(containsString("Неверный логин или пароль!")));
+                .andExpect(content().string(containsString("Wrong login or password!")));
     }
 
     @Test

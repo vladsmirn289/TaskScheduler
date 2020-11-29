@@ -49,8 +49,10 @@ public class ClientServiceImpl implements ClientService {
             roles.add(Role.USER);
         }
 
-        String plainPassword = client.getPassword();
-        client.setPassword(passwordEncoder.encode(plainPassword));
+        if (client.getId() == null) {
+            String plainPassword = client.getPassword();
+            client.setPassword(passwordEncoder.encode(plainPassword));
+        }
         clientRepo.save(client);
     }
 

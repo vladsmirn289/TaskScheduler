@@ -15,6 +15,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/repeatTask/list"><@spring.message "repeatable_tasks"/> <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/client/personalRoom"><@spring.message "personal_room"/> <span class="sr-only">(current)</span></a>
+            </li>
         </ul>
     </div>
 
@@ -50,7 +53,7 @@
                     let index = url.indexOf("lang");
                     url = url.slice(0, index)
                 }
-                url+="&lang=US";
+                url+="&amp;lang=US";
             } else {
                 url+="?lang=US";
             }
@@ -65,7 +68,7 @@
                     let index = url.indexOf("lang");
                     url = url.slice(0, index)
                 }
-                url+="&lang=RU";
+                url+="&amp;lang=RU";
             } else {
                 url+="?lang=RU";
             }
