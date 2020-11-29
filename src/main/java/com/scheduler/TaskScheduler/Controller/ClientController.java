@@ -104,4 +104,16 @@ public class ClientController {
 
         return "redirect:/client/personalRoom";
     }
+
+    @GetMapping("/deleteAccount")
+    public String deleteAccount(@AuthenticationPrincipal Client client,
+                                HttpServletRequest request) {
+        logger.info("Deleting account");
+
+        clientService.delete(client);
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+        request.getSession().removeAttribute("SPRING_SECURITY_CONTEXT");
+        return "redirect:/login";
+    }
 }

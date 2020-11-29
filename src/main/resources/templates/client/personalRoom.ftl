@@ -30,10 +30,22 @@
                 <a class="btn btn-primary" href="/client/resetPasswordPage"><@spring.message "change_password"/></a>
             </div>
 
+            <div class="form-group">
+                <a class="btn btn-primary" onclick="return deletePermission()" href="/client/deleteAccount">
+                    <@spring.message "delete_account"/>
+                </a>
+            </div>
+
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <div class="row justify-content-md-center mb-2">
                 <button type="submit" class="btn btn-success"><@spring.message "save_changes"/></button>
             </div>
         </form>
+
+        <script>
+            function deletePermission() {
+                return window.confirm("<@spring.message 'delete_permission'/>");
+            }
+        </script>
     </div>
 </@c.commonPage>

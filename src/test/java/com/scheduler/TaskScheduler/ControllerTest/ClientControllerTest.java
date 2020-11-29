@@ -14,6 +14,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -181,5 +183,18 @@ public class ClientControllerTest {
         assertThat(client).isNotNull();
         assertThat(client.getId()).isEqualTo(100L);
         assertThat(passwordEncoder.matches(client.getPassword(), "12345"));
+    }
+
+    @Test
+    @WithUserDetails("simpleUser")
+    public void shouldDeleteAccount() throws Exception {
+        mockMvc
+                .perform(get("/client/deleteAccount"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+
+        Optional<Client> client = clientService.findByLogin("simpleUser");
+        assertThat(client.isPresent()).isFalse();
     }
 }
