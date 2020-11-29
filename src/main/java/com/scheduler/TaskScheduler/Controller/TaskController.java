@@ -7,6 +7,9 @@ import com.scheduler.TaskScheduler.Service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -31,11 +34,13 @@ public class TaskController {
     @GetMapping("/listOfTasks/{date}")
     public String listOfTasks(@AuthenticationPrincipal Client client,
                               @PathVariable("date") String stringDate,
-                              Model model) {
+                              Model model,
+                              @PageableDefault(sort = {"name"}, size = 5) Pageable pageable) {
         logger.info("Showing list of tasks");
         LocalDate date = LocalDate.parse(stringDate);
-        List<Task> tasks = taskService.findByClientAndDate(client, date);
+        Page<Task> tasks = taskService.findByClientAndDate(client, date, pageable);
 
+        model.addAttribute("url", "/task/listOfTasks/" + date + "?");
         model.addAttribute("tasks", tasks);
         model.addAttribute("date", stringDate);
 

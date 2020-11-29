@@ -2,13 +2,14 @@ package com.scheduler.TaskScheduler.Service;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Model.RepeatableTask;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface RepeatTaskService {
     Optional<RepeatableTask> findById(Long id);
-    List<RepeatableTask> findByClient(Client client);
+    Page<RepeatableTask> findByClient(Client client, Pageable pageable);
 
     void save(RepeatableTask task);
 

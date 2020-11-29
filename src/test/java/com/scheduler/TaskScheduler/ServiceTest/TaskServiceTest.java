@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,7 +69,9 @@ public class TaskServiceTest {
         Client client = clientService.findByLogin("anotherUser").orElse(null);
         assertThat(client).isNotNull();
 
-        List<Task> taskList = taskService.findByClientAndDate(client, LocalDate.of(2020, 11, 29));
+        PageRequest page = PageRequest.of(0, 100);
+        List<Task> taskList = taskService.findByClientAndDate(client,
+                LocalDate.of(2020, 11, 29), page).getContent();
         assertThat(taskList.size()).isEqualTo(1);
     }
 
@@ -77,7 +80,9 @@ public class TaskServiceTest {
         Client client = clientService.findByLogin("anotherUser").orElse(null);
         assertThat(client).isNotNull();
 
-        List<Task> taskList = taskService.findByClientAndDate(client, LocalDate.of(2000, 1, 29));
+        PageRequest page = PageRequest.of(0, 100);
+        List<Task> taskList = taskService.findByClientAndDate(client,
+                LocalDate.of(2000, 1, 29), page).getContent();
         assertThat(taskList.size()).isEqualTo(0);
     }
 

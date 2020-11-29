@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
@@ -65,7 +67,9 @@ public class TaskRepoTest {
     public void shouldFindTasksByClientAndDate() {
         Client client = clientRepo.findById(102L).orElse(null);
         assertThat(client).isNotNull();
-        List<Task> taskList = taskRepo.findByClientAndDate(client, LocalDate.of(2020, 11, 23));
+        PageRequest page = PageRequest.of(0, 100);
+        List<Task> taskList = taskRepo.findByClientAndDate(client,
+                LocalDate.of(2020, 11, 23), page).getContent();
 
         assertThat(taskList).isNotNull();
         assertThat(taskList.size()).isEqualTo(1);

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +47,8 @@ public class RepeatTaskServiceTest {
         Client client = clientService.findByLogin("anotherUser").orElse(null);
         assertThat(client).isNotNull();
 
-        List<RepeatableTask> taskList = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> taskList = repeatTaskService.findByClient(client, page).getContent();
         assertThat(taskList.size()).isEqualTo(1);
     }
 
@@ -55,7 +57,8 @@ public class RepeatTaskServiceTest {
         Client client = clientService.findByLogin("123").orElse(null);
         assertThat(client).isNull();
 
-        List<RepeatableTask> taskList = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> taskList = repeatTaskService.findByClient(client, page).getContent();
         assertThat(taskList.size()).isEqualTo(0);
     }
 
@@ -71,7 +74,8 @@ public class RepeatTaskServiceTest {
         task.setClient(client);
         repeatTaskService.save(task);
 
-        List<RepeatableTask> found = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> found = repeatTaskService.findByClient(client, page).getContent();
         assertThat(found.size()).isEqualTo(1);
 
         assertThat(client.getRepeatableTasks().size()).isEqualTo(1);
@@ -88,7 +92,8 @@ public class RepeatTaskServiceTest {
 
         repeatTaskService.delete(tasks.get(0));
 
-        List<RepeatableTask> found = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> found = repeatTaskService.findByClient(client, page).getContent();
         assertThat(found.size()).isEqualTo(0);
 
         assertThat(tasks.size()).isEqualTo(0);
@@ -105,7 +110,8 @@ public class RepeatTaskServiceTest {
 
         repeatTaskService.deleteById(200L);
 
-        List<RepeatableTask> found = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> found = repeatTaskService.findByClient(client, page).getContent();
         assertThat(found.size()).isEqualTo(0);
 
         assertThat(tasks.size()).isEqualTo(0);

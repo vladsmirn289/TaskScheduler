@@ -1,4 +1,5 @@
 <#import "../parts/common.ftl" as c>
+<#import "../parts/pager.ftl" as p>
 <#import "/spring.ftl" as spring>
 
 <@c.commonPage>
@@ -9,7 +10,11 @@
             </div>
         </form>
 
-        <#list repeatTasks as t>
+        <#if repeatTasks.content?size != 0>
+            <@p.pager url repeatTasks/>
+        </#if>
+
+        <#list repeatTasks.content as t>
             <div class="card border-0 mb-3">
                 <div class="card-title text-center bg-warning m-0">
                     ${t.getName()}
@@ -57,5 +62,9 @@
                 </div>
             </div>
         </#list>
+
+        <#if repeatTasks.content?size != 0>
+            <@p.pager url repeatTasks/>
+        </#if>
     </div>
 </@c.commonPage>

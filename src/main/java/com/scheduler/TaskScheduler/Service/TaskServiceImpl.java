@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,10 +51,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Task> findByClientAndDate(Client client, LocalDate date) {
+    public Page<Task> findByClientAndDate(Client client, LocalDate date, Pageable pageable) {
         logger.info("Finding tasks belonging to the client by date");
 
-        return taskRepo.findByClientAndDate(client, date);
+        return taskRepo.findByClientAndDate(client, date, pageable);
     }
 
     @Override
@@ -113,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public boolean clientHasTask(Client client, Task task) {
-        List<Task> taskList = findByClientAndDate(client, task.getDate());
+        List<Task> taskList = findByClient(client);
 
         return taskList.contains(task);
     }

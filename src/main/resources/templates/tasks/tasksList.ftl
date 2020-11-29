@@ -1,4 +1,5 @@
 <#import "../parts/common.ftl" as c>
+<#import "../parts/pager.ftl" as p>
 <#import "/spring.ftl" as spring>
 
 <@c.commonPage>
@@ -9,7 +10,11 @@
             </div>
         </form>
 
-        <#list tasks as t>
+        <#if tasks.content?size != 0>
+            <@p.pager url tasks/>
+        </#if>
+
+        <#list tasks.content as t>
             <div class="card border-0 mb-3">
                 <div class="card-title text-center bg-warning m-0">
                     ${t.getName()}
@@ -71,5 +76,9 @@
                 </div>
             </div>
         </#list>
+
+        <#if tasks.content?size != 0>
+            <@p.pager url tasks/>
+        </#if>
     </div>
 </@c.commonPage>

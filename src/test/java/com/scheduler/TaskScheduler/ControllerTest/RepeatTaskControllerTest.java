@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -63,7 +64,7 @@ public class RepeatTaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("tasks/listRepeatTasks"))
                 .andExpect(model().attributeExists("repeatTasks"))
-                .andExpect(xpath("/html/body/div/div/div").string(containsString("RepeatableTask1")));
+                .andExpect(xpath("/html/body/div/div/div[2]/div[1]").string(containsString("RepeatableTask1")));
     }
 
     @Test
@@ -110,7 +111,8 @@ public class RepeatTaskControllerTest {
                 .andExpect(redirectedUrl("/repeatTask/list"));
 
         Client client = clientService.findByLogin("simpleUser").get();
-        List<RepeatableTask> tasks = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> tasks = repeatTaskService.findByClient(client, page).getContent();
 
         assertThat(tasks.size()).isEqualTo(1);
         RepeatableTask task = tasks.get(0);
@@ -178,7 +180,8 @@ public class RepeatTaskControllerTest {
                 .andExpect(redirectedUrl("/repeatTask/list"));
 
         Client client = clientService.findByLogin("anotherUser").get();
-        List<RepeatableTask> tasks = repeatTaskService.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> tasks = repeatTaskService.findByClient(client, page).getContent();
 
         assertThat(tasks.size()).isEqualTo(1);
         RepeatableTask task = tasks.get(0);

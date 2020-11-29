@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +43,10 @@ public class RepeatTaskServiceImpl implements RepeatTaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RepeatableTask> findByClient(Client client) {
+    public Page<RepeatableTask> findByClient(Client client, Pageable pageable) {
         logger.info("Finding repeatable tasks belonging to the client");
 
-        return repeatTaskRepo.findByClient(client);
+        return repeatTaskRepo.findByClient(client, pageable);
     }
 
     @Override
@@ -102,7 +105,8 @@ public class RepeatTaskServiceImpl implements RepeatTaskService {
 
     @Override
     public boolean clientHasRepeatTask(Client client, RepeatableTask task) {
-        List<RepeatableTask> tasks = findByClient(client);
+        PageRequest page = PageRequest.of(0, Integer.MAX_VALUE);
+        List<RepeatableTask> tasks = findByClient(client, page).getContent();
 
         return tasks.contains(task);
     }

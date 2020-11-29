@@ -8,6 +8,9 @@ import com.scheduler.TaskScheduler.Util.PeriodFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,10 +36,12 @@ public class RepeatTaskController {
 
     @GetMapping("/list")
     public String listRepeatTasks(@AuthenticationPrincipal Client client,
-                                  Model model) {
+                                  Model model,
+                                  @PageableDefault(sort = {"name"}, size = 5) Pageable pageable) {
         logger.info("Showing the list of repeatable tasks");
-        List<RepeatableTask> tasks = repeatTaskService.findByClient(client);
+        Page<RepeatableTask> tasks = repeatTaskService.findByClient(client, pageable);
 
+        model.addAttribute("url", "/repeatTask/list?");
         model.addAttribute("repeatTasks", tasks);
         return "tasks/listRepeatTasks";
     }

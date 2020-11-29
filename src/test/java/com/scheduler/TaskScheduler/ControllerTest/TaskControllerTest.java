@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -58,7 +59,7 @@ public class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("tasks/tasksList"))
                 .andExpect(model().attributeExists("tasks", "date"))
-                .andExpect(xpath("/html/body/div/div/div").string(containsString("Task3")));
+                .andExpect(xpath("/html/body/div/div/div[2]/div[1]").string(containsString("Task3")));
     }
 
     @Test
@@ -102,7 +103,9 @@ public class TaskControllerTest {
                 .andExpect(redirectedUrl("/task/listOfTasks/2020-11-01"));
 
         Client client = clientService.findByLogin("anotherUser").get();
-        List<Task> tasks = taskService.findByClientAndDate(client, LocalDate.of(2020, 11, 1));
+        PageRequest page = PageRequest.of(0, 100);
+        List<Task> tasks = taskService.findByClientAndDate(client,
+                LocalDate.of(2020, 11, 1), page).getContent();
 
         assertThat(tasks.size()).isEqualTo(1);
         Task task = tasks.get(0);
@@ -130,7 +133,9 @@ public class TaskControllerTest {
                 .andExpect(redirectedUrl("/task/listOfTasks/2020-11-30"));
 
         Client client = clientService.findByLogin("anotherUser").get();
-        List<Task> tasks = taskService.findByClientAndDate(client, LocalDate.of(2020, 11, 30));
+        PageRequest page = PageRequest.of(0, 100);
+        List<Task> tasks = taskService.findByClientAndDate(client,
+                LocalDate.of(2020, 11, 30), page).getContent();
 
         assertThat(tasks.size()).isEqualTo(1);
         Task task = tasks.get(0);

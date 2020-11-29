@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
@@ -32,7 +33,8 @@ public class RepeatTaskRepoTest {
     public void shouldFindTasksByClient() {
         Client client = clientRepo.findById(102L).orElse(null);
         assertThat(client).isNotNull();
-        List<RepeatableTask> taskList = repeatTaskRepo.findByClient(client);
+        PageRequest page = PageRequest.of(0, 100);
+        List<RepeatableTask> taskList = repeatTaskRepo.findByClient(client, page).getContent();
 
         assertThat(taskList).isNotNull();
         assertThat(taskList.size()).isEqualTo(1);
