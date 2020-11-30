@@ -64,11 +64,6 @@ public class LoginControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
-
-        mockMvc
-                .perform(get("/")
-                        .with(user("secondUser")))
-                .andExpect(xpath("/html/body/nav/div[2]").string(containsString("secondUser")));
     }
 
     @Test

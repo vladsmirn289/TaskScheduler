@@ -58,9 +58,7 @@ public class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("tasks/tasksList"))
-                .andExpect(model().attributeExists("tasks", "date"))
-                .andExpect(xpath("/html/body/div/div/div[3]/table/tbody/tr[1]/td/div")
-                        .string(containsString("Task3")));
+                .andExpect(model().attributeExists("tasks", "date"));
     }
 
     @Test

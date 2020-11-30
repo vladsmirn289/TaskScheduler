@@ -53,7 +53,7 @@
                     let index = url.indexOf("lang");
                     url = url.slice(0, index)
                 }
-                url+="&amp;lang=US";
+                url+="&lang=US";
             } else {
                 url+="?lang=US";
             }
@@ -68,7 +68,7 @@
                     let index = url.indexOf("lang");
                     url = url.slice(0, index)
                 }
-                url+="&amp;lang=RU";
+                url+="&lang=RU";
             } else {
                 url+="?lang=RU";
             }

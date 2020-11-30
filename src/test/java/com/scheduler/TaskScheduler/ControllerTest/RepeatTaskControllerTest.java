@@ -63,9 +63,7 @@ public class RepeatTaskControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("tasks/listRepeatTasks"))
-                .andExpect(model().attributeExists("repeatTasks"))
-                .andExpect(xpath("/html/body/div/div/div[3]/table/tbody/tr[1]/td/div")
-                        .string(containsString("RepeatableTask1")));
+                .andExpect(model().attributeExists("repeatTasks"));
     }
 
     @Test
