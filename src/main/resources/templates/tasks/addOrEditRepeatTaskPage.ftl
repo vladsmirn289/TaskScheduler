@@ -2,125 +2,129 @@
 <#import "/spring.ftl" as spring>
 
 <@c.commonPage>
-    <div class="mx-auto bg-dark text-center text-white" style="padding: 15px; width: 50%; border-radius: 10px;">
-        <form action="/repeatTask/createOrUpdateTask" name="repeatTask" method="post">
-            <#if repeatTask?? && repeatTask.getId()??>
-                <input type="text" value="${repeatTask.getId()}" name="id" hidden="hidden"/>
-            </#if>
+    <div class="mx-auto bg-dark text-center text-white p-3 col-md-5" style="border-radius: 10px;">
+        <div class="row">
+            <div class="mx-auto col-md-12">
+                <form action="/repeatTask/createOrUpdateTask" name="repeatTask" method="post">
+                    <#if repeatTask?? && repeatTask.getId()??>
+                        <input type="text" value="${repeatTask.getId()}" name="id" hidden="hidden"/>
+                    </#if>
 
-            <div class="form-group">
-                <label for="taskName"><@spring.message "task_name"/></label><br/>
-                <input type="text" id="taskName" name="name" style="width: 50%"
-                       <#if repeatTask??>value="${repeatTask.getName()}"</#if>/>
+                    <div class="form-group">
+                        <label for="taskName"><@spring.message "task_name"/></label><br/>
+                        <input type="text" id="taskName" name="name" style="width: 50%"
+                               <#if repeatTask??>value="${repeatTask.getName()}"</#if>/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskDesc"><@spring.message "description"/></label><br/>
+                        <textarea rows="5" class="w-100" id="taskDesc" name="description"><#if repeatTask??>${repeatTask.getDescription()}</#if></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPriority"><@spring.message "choose_priority"/></label><br/>
+                        <select id="inputPriority" name="priority" class="form-control mx-auto" style="width: 50%">
+                            <option value="NO" <#if repeatTask?? && "NO" == repeatTask.getPriority()>selected="selected"</#if>>
+                                <@spring.message "no_priority"/>
+                            </option>
+                            <option value="LOW" <#if repeatTask?? && "LOW" == repeatTask.getPriority()>selected="selected"</#if>>
+                                <@spring.message "low_priority"/>
+                            </option>
+                            <option value="MEDIUM" <#if repeatTask?? && "MEDIUM" == repeatTask.getPriority()>selected="selected"</#if>>
+                                <@spring.message "medium_priority"/>
+                            </option>
+                            <option value="HIGH" <#if repeatTask?? && "HIGH" == repeatTask.getPriority()>selected="selected"</#if>>
+                                <@spring.message "high_priority"/>
+                            </option>
+                        </select>
+                    </div>
+
+                    <#if dateError??>
+                        <div class="text-danger">
+                            <@spring.message "dateError"/>
+                        </div>
+                    </#if>
+
+                    <#if dateStartError??>
+                        <div class="text-danger">
+                            <@spring.message "dateStartError"/>
+                        </div>
+                    </#if>
+
+                    <div class="form-group">
+                        <label for="startDate"><@spring.message "start_date"/></label><br/>
+                        <input type="date" id="startDate" name="startDateString"
+                               <#if repeatTask?? && repeatTask.getStartDate()??>value="${repeatTask.getStartDate()}" </#if>/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endDate"><@spring.message "end_date"/></label><br/>
+                        <input type="date" id="endDate" name="endDateString"
+                               <#if repeatTask?? && repeatTask.getEndDate()??>value="${repeatTask.getEndDate()}" </#if>/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPeriodMode"><@spring.message "choosing_period"/></label><br/>
+                        <select id="inputPeriodMode" name="periodMode" class="form-control mx-auto" style="width: 50%">
+                            <option class="each_day_opt" value="EACH_DAY" selected="selected">
+                                <@spring.message "each_day"/>
+                            </option>
+
+                            <option class="each_week_opt" value="EACH_WEEK">
+                                <@spring.message "each_week"/>
+                            </option>
+
+                            <option class="each_day_of_month_opt" value="EACH_DAY_OF_MONTH">
+                                <@spring.message "each_day_of_month"/>
+                            </option>
+
+                            <option class="each_week_of_month_opt" value="EACH_WEEK_OF_MONTH">
+                                <@spring.message "each_week_of_month"/>
+                            </option>
+
+                            <option class="each_day_of_week_of_month_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
+                                <@spring.message "each_day_of_week_of_month"/>
+                            </option>
+
+                            <!-- With gaps -->
+
+                            <option class="each_n_days_opt" value="EACH_DAY">
+                                <@spring.message "after_n_days"/>
+                            </option>
+
+                            <option class="each_n_weeks_opt" value="EACH_WEEK">
+                                <@spring.message "after_n_weeks"/>
+                            </option>
+
+                            <option class="each_n_month_with_day_opt" value="EACH_DAY_OF_MONTH">
+                                <@spring.message "each_day_of_month_after_n_months"/>
+                            </option>
+
+                            <option class="each_n_month_with_week_opt" value="EACH_WEEK_OF_MONTH">
+                                <@spring.message "each_week_of_month_after_n_months"/>
+                            </option>
+
+                            <option class="each_n_month_with_week_and_day_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
+                                <@spring.message "each_day_of_week_of_month_after_n_months"/>
+                            </option>
+                        </select>
+
+                        <div id="period_res" class="mt-2">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                        <#if repeatTask?? && repeatTask.getId()??>
+                            <button class="btn btn-primary" type="submit"><@spring.message "edit"/></button>
+                        <#else>
+                            <button class="btn btn-primary" type="submit"><@spring.message "create"/></button>
+                        </#if>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label for="taskDesc"><@spring.message "description"/></label><br/>
-                <textarea rows="5" cols="50" id="taskDesc" name="description"><#if repeatTask??>${repeatTask.getDescription()}</#if></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="inputPriority"><@spring.message "choose_priority"/></label><br/>
-                <select id="inputPriority" name="priority" class="form-control mx-auto" style="width: 50%">
-                    <option value="NO" <#if repeatTask?? && "NO" == repeatTask.getPriority()>selected="selected"</#if>>
-                        <@spring.message "no_priority"/>
-                    </option>
-                    <option value="LOW" <#if repeatTask?? && "LOW" == repeatTask.getPriority()>selected="selected"</#if>>
-                        <@spring.message "low_priority"/>
-                    </option>
-                    <option value="MEDIUM" <#if repeatTask?? && "MEDIUM" == repeatTask.getPriority()>selected="selected"</#if>>
-                        <@spring.message "medium_priority"/>
-                    </option>
-                    <option value="HIGH" <#if repeatTask?? && "HIGH" == repeatTask.getPriority()>selected="selected"</#if>>
-                        <@spring.message "high_priority"/>
-                    </option>
-                </select>
-            </div>
-
-            <#if dateError??>
-                <div class="text-danger">
-                    <@spring.message "dateError"/>
-                </div>
-            </#if>
-
-            <#if dateStartError??>
-                <div class="text-danger">
-                    <@spring.message "dateStartError"/>
-                </div>
-            </#if>
-
-            <div class="form-group">
-                <label for="startDate"><@spring.message "start_date"/></label><br/>
-                <input type="date" id="startDate" name="startDateString"
-                       <#if repeatTask?? && repeatTask.getStartDate()??>value="${repeatTask.getStartDate()}" </#if>/>
-            </div>
-
-            <div class="form-group">
-                <label for="endDate"><@spring.message "end_date"/></label><br/>
-                <input type="date" id="endDate" name="endDateString"
-                        <#if repeatTask?? && repeatTask.getEndDate()??>value="${repeatTask.getEndDate()}" </#if>/>
-            </div>
-
-            <div class="form-group">
-                <label for="inputPeriodMode"><@spring.message "choosing_period"/></label><br/>
-                <select id="inputPeriodMode" name="periodMode" class="form-control mx-auto" style="width: 50%">
-                    <option class="each_day_opt" value="EACH_DAY" selected="selected">
-                        <@spring.message "each_day"/>
-                    </option>
-
-                    <option class="each_week_opt" value="EACH_WEEK">
-                        <@spring.message "each_week"/>
-                    </option>
-
-                    <option class="each_day_of_month_opt" value="EACH_DAY_OF_MONTH">
-                        <@spring.message "each_day_of_month"/>
-                    </option>
-
-                    <option class="each_week_of_month_opt" value="EACH_WEEK_OF_MONTH">
-                        <@spring.message "each_week_of_month"/>
-                    </option>
-
-                    <option class="each_day_of_week_of_month_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
-                        <@spring.message "each_day_of_week_of_month"/>
-                    </option>
-
-                    <!-- With gaps -->
-
-                    <option class="each_n_days_opt" value="EACH_DAY">
-                        <@spring.message "after_n_days"/>
-                    </option>
-
-                    <option class="each_n_weeks_opt" value="EACH_WEEK">
-                        <@spring.message "after_n_weeks"/>
-                    </option>
-
-                    <option class="each_n_month_with_day_opt" value="EACH_DAY_OF_MONTH">
-                        <@spring.message "each_day_of_month_after_n_months"/>
-                    </option>
-
-                    <option class="each_n_month_with_week_opt" value="EACH_WEEK_OF_MONTH">
-                        <@spring.message "each_week_of_month_after_n_months"/>
-                    </option>
-
-                    <option class="each_n_month_with_week_and_day_opt" value="EACH_DAY_OF_WEEK_OF_MONTH">
-                        <@spring.message "each_day_of_week_of_month_after_n_months"/>
-                    </option>
-                </select>
-
-                <div id="period_res" class="mt-2">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <#if repeatTask?? && repeatTask.getId()??>
-                    <button class="btn btn-primary" type="submit"><@spring.message "edit"/></button>
-                <#else>
-                    <button class="btn btn-primary" type="submit"><@spring.message "create"/></button>
-                </#if>
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>

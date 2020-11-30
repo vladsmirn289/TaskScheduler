@@ -11,7 +11,7 @@
         <link type="text/css" rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
         <link type="text/css" rel="stylesheet" href="/css/common.css"/>
 
-        <link rel="shortcut icon" type="image/x-icon" href="http://faviconka.ru/ico/faviconka_ru_299409.ico"/>
+        <link rel="shortcut icon" type="image/x-icon" href="https://img.icons8.com/flat_round/32/000000/clock--v1.png"/>
     </head>
 
     <body>
@@ -20,7 +20,7 @@
         <script src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
 
         <#include "navbar.ftl">
-        <div class="container mt-5">
+        <div class="container">
             <#nested>
         </div>
     </body>

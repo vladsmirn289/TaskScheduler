@@ -19,15 +19,15 @@
                 <a class="nav-link" href="/client/personalRoom"><@spring.message "personal_room"/> <span class="sr-only">(current)</span></a>
             </li>
         </ul>
+
+        <a class="btn p-0" id="usaLocale" href="" onclick="toUSALocale()">
+            <img src="https://img.icons8.com/color/40/000000/usa-circular.png" class="d-inline-block align-top" alt="US"/>
+        </a>
+
+        <a class="btn p-0" id="ruLocale" href="" onclick="toRussianLocale()">
+            <img src="https://img.icons8.com/color/40/000000/russian-federation-circular.png" class="d-inline-block align-top" alt="RU"/>
+        </a>
     </div>
-
-    <a class="btn p-0" id="usaLocale" href="" onclick="toUSALocale()">
-        <img src="https://img.icons8.com/color/40/000000/usa-circular.png" class="d-inline-block align-top" alt="US"/>
-    </a>
-
-    <a class="btn p-0" id="ruLocale" href="" onclick="toRussianLocale()">
-        <img src="https://img.icons8.com/color/40/000000/russian-federation-circular.png" class="d-inline-block align-top" alt="RU"/>
-    </a>
 
     <div class="navbar-text text-white mr-3">
         ${login_name}
