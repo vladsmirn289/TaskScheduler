@@ -48,5 +48,11 @@
                 </form>
             </div>
         </div>
+
+        <div class="row">
+            <div class="mx-auto">
+                <a href="/login"><@spring.message "login"/></a>
+            </div>
+        </div>
     </div>
 </@c.commonPage>

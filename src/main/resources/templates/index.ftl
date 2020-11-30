@@ -29,8 +29,8 @@
             <#assign month = springMacroRequestContext.getMessage("december")>
         </#if>
 
-        <div class="row mx-auto col-md-auto">
-            <div class="mx-auto">
+        <div class="row mx-auto col-md-auto mb-3">
+            <div class="mx-auto form-inline">
                 <form class="d-inline-block" action="/" method="get">
                     <input type="text" name="date" hidden="hidden"
                             <#if localDate.minusMonths(1).getMonthValue() gt 9>
@@ -45,7 +45,7 @@
                 </form>
 
                 <form class="d-inline-block ml-1 mr-1" action="/" method="get">
-                    <div class="form-group d-inline-block">
+                    <div class="form-group d-inline-block my-auto">
                         <input class="form-control" type="month" name="date"
                                 <#if localDate.getMonthValue() gt 9>
                                value="${localDate.getYear()?c}-${localDate.getMonthValue()}"/>
@@ -54,7 +54,7 @@
                         </#if>
                     </div>
 
-                    <div class="form-group d-inline-block">
+                    <div class="form-group d-inline-block my-auto">
                         <button class="btn btn-primary" type="submit">Ok</button>
                     </div>
                 </form>

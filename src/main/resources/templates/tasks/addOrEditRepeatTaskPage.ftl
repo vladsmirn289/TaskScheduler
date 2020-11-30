@@ -10,6 +10,10 @@
                         <input type="text" value="${repeatTask.getId()}" name="id" hidden="hidden"/>
                     </#if>
 
+                    <div class="row justify-content-center mb-3">
+                        <a href="/repeatTask/list"><@spring.message "return_back"/></a>
+                    </div>
+
                     <div class="form-group">
                         <label for="taskName"><@spring.message "task_name"/></label><br/>
                         <input type="text" id="taskName" name="name" style="width: 50%"

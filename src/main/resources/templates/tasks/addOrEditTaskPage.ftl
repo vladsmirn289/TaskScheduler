@@ -10,6 +10,14 @@
                         <input type="text" value="${task.getId()}" name="id" hidden="hidden"/>
                     </#if>
 
+                    <div class="row justify-content-center mb-3">
+                        <#if task??>
+                            <a href="/task/listOfTasks/${task.date}"><@spring.message "return_back"/></a>
+                        <#else>
+                            <a href="/task/listOfTasks/${date}"><@spring.message "return_back"/></a>
+                        </#if>
+                    </div>
+
                     <div class="form-group">
                         <label for="taskName"><@spring.message "task_name"/></label><br/>
                         <input type="text" id="taskName" name="name" style="width: 50%"

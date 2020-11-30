@@ -30,6 +30,10 @@
         </div>
 
         <div class="row justify-content-center">
+            <a href="/client/personalRoom"><@spring.message "personal_room"/></a>
+        </div>
+
+        <div class="row justify-content-center">
             <a href="/registration"><@spring.message "register"/></a>
         </div>
     </div>
