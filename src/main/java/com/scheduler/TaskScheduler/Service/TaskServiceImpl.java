@@ -114,6 +114,7 @@ public class TaskServiceImpl implements TaskService {
         client.getTasks().remove(task);
     }
 
+    @Override
     public boolean clientHasTask(Client client, Task task) {
         List<Task> taskList = findByClient(client);
 

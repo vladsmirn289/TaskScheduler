@@ -2,12 +2,12 @@ package com.scheduler.TaskScheduler.Controller;
 
 import com.scheduler.TaskScheduler.Model.Client;
 import com.scheduler.TaskScheduler.Service.ClientService;
+import com.scheduler.TaskScheduler.Util.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,8 +67,7 @@ public class ClientController {
         client.setLogin(login);
         clientService.save(client);
         if (!oldLogin.equals(login)) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-            request.getSession().removeAttribute("SPRING_SECURITY_CONTEXT");
+            SessionUtil.setAuthOnNull(request);
             return "redirect:/client/personalRoom";
         }
 
@@ -112,8 +111,7 @@ public class ClientController {
 
         clientService.delete(client);
 
-        SecurityContextHolder.getContext().setAuthentication(null);
-        request.getSession().removeAttribute("SPRING_SECURITY_CONTEXT");
+        SessionUtil.setAuthOnNull(request);
         return "redirect:/login";
     }
 }
