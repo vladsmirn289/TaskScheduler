@@ -2,7 +2,7 @@ package com.scheduler.TaskScheduler.Util;
 
 import com.scheduler.TaskScheduler.DTO.PeriodParameters;
 import com.scheduler.TaskScheduler.Model.*;
-import javafx.util.Pair;
+import com.scheduler.TaskScheduler.Util.Pair;
 
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
