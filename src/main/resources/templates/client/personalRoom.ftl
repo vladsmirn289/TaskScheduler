@@ -9,6 +9,12 @@
             </div>
         </div>
 
+        <div class="row ml-1 mr-1">
+            <div class="mx-auto bg-primary p-1 mb-2 overflow-auto" style="border-radius: 10px">
+                <@spring.message "jwt_token"/>: ${client.jwtToken}
+            </div>
+        </div>
+
         <div class="row">
             <div class="mx-auto col-md-10">
                 <form action="/client/personalRoom" name="changedPerson" method="post">

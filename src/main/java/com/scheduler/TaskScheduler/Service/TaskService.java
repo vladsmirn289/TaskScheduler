@@ -15,6 +15,7 @@ public interface TaskService {
     List<Task> findByClient(Client client);
     Page<Task> findByClientAndDate(Client client, LocalDate date, Pageable pageable);
     List<Task> findAllByRepeatableTask(RepeatableTask repeatableTask);
+    List<Task> findAllByDate(LocalDate date);
 
     void save(Task task);
 

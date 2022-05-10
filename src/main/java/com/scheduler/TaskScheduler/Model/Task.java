@@ -1,10 +1,16 @@
 package com.scheduler.TaskScheduler.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -12,16 +18,21 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonIgnore
     private Client client;
 
     @ManyToOne
     @JoinColumn(name = "repeatable_task_id")
+    @JsonIgnore
     private RepeatableTask repeatableTask;
 
     private String name;
     private String description;
     private Priority priority;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate date;
+
     private int progress;
 
     protected Task() {

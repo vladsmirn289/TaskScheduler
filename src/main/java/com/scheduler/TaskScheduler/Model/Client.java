@@ -21,6 +21,9 @@ public class Client implements UserDetails {
     private String password;
     private String login;
 
+    @Column(name = "jwt_token")
+    private String jwtToken;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "client_roles",
@@ -70,6 +73,14 @@ public class Client implements UserDetails {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 
     public Set<Role> getRoles() {

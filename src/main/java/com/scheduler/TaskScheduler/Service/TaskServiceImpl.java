@@ -64,6 +64,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Task> findAllByDate(LocalDate date) {
+        return taskRepo.findAllByDate(date);
+    }
+
+    @Override
     public void save(Task task) {
         logger.info("Saving task");
 

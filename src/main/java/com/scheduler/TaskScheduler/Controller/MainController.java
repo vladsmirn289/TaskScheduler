@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class MainController {
         }
 
         model.addAttribute("calendar", CalendarUtil.calendarByLocalDate(localDate));
-        model.addAttribute("now", LocalDate.now());
+        model.addAttribute("now", ZonedDateTime.now().toLocalDate());
         model.addAttribute("localDate", localDate);
 
         List<Task> tasks = taskService.findByClient(client);
